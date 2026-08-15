@@ -64,3 +64,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0003](0003-issue-driven-development.md) | Issue 駆動開発と ADR の運用方針 | Accepted |
 | [0004](0004-tech-stack.md) | 技術スタックは Vite + React + TypeScript とする | Accepted |
 | [0005](0005-hosting-github-pages.md) | ホスティングは GitHub Pages とする | Accepted |
+| [0006](0006-target-environments.md) | 対応環境はデスクトップ Chrome とモバイルの両方とする | Accepted |

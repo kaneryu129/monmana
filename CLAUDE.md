@@ -29,6 +29,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 開発プロセス | Issue 駆動 + ADR | [0003](docs/adr/0003-issue-driven-development.md) |
 | 技術スタック | Vite + React + TypeScript | [0004](docs/adr/0004-tech-stack.md) |
 | ホスティング | GitHub Pages + GitHub Actions | [0005](docs/adr/0005-hosting-github-pages.md) |
+| 対応環境 | デスクトップ Chrome + iOS Safari + Android Chrome | [0006](docs/adr/0006-target-environments.md) |
+
+### 対応環境と確認方針
+
+開発は macOS の Chrome で行い、リリース前に実機で確認する。
+
+**「Chrome で動いた」を「iPhone で動く」の保証にしてはいけない。**
+以下は iOS Safari 固有の制約であり、デスクトップ Chrome では一切再現しない。
+
+| 制約 | デスクトップ Chrome | iOS Safari |
+| --- | --- | --- |
+| 7 日間の無操作でストレージ削除 | 起きない | 起きる（ホーム画面追加で回避） |
+| `navigator.vibrate()` | 動作する | 非対応 |
+| 音声の自動再生制限 | 緩い | 厳しい（要 unlock） |
+
+終了音・バイブレーション・PWA 化・ホーム画面追加に関わる実装は、
+**実機で確認するまで完了としない。**
+
+なお、バックグラウンドでのタイマー精度は Chrome でもスロットリングが再現するため、
+デスクトップで検証してよい。
 
 ### 実装上、特に注意すべき制約
 
