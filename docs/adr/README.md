@@ -66,3 +66,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0005](0005-hosting-github-pages.md) | ホスティングは GitHub Pages とする | Accepted |
 | [0006](0006-target-environments.md) | 対応環境はデスクトップ Chrome とモバイルの両方とする | Accepted |
 | [0007](0007-verification-strategy.md) | 動作確認は Chrome (macOS) と iPhone の 2 環境で行う | Accepted |
+| [0008](0008-plant-art-style.md) | モンステラの画風は手描き風とする | Accepted |
