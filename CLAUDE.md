@@ -32,6 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 対応環境 | デスクトップ Chrome + iOS Safari + Android Chrome | [0006](docs/adr/0006-target-environments.md) |
 | モンステラの画風 | 手描き風（輪郭をずらした層でにじみを作る） | [0008](docs/adr/0008-plant-art-style.md) |
 | リンタ | oxlint（ESLint に差し替えない） | [0009](docs/adr/0009-linter-oxlint.md) |
+| SPA の直リンク | 404.html フォールバック（HashRouter を使わない） | [0010](docs/adr/0010-spa-routing-on-pages.md) |
 
 ### 対応環境と確認方針
 

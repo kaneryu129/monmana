@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 同時実行を 1 本に絞る。連続 push でデプロイが競合しないようにする
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # tsc -b と vite build の両方が走る
+      - run: npm run build
+
+      # SPA の直リンク対策（ADR-0010）
+      # GitHub Pages は静的配信のため /monmana/timer への直アクセスが 404 になる。
+      # index.html と同じ内容を 404.html に置き、SPA 側でルートを解決させる。
+      - name: 404.html を用意する
+        run: cp dist/index.html dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
