@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# 同じブランチへの連続 push では、古い実行を打ち切る
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # 落ちたところで止めず、全部の結果を見たいので continue-on-error は使わず
+      # 個別ステップに分ける。どれが落ちたかログ上で分かるようにする。
+      - name: 型検査
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: 整形の確認
+        run: npm run format:check
+
+      - name: テスト
+        run: npm test
