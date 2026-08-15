@@ -162,6 +162,7 @@ npm run build      # 型検査 + 本番ビルド
 npm run preview    # ビルド結果をローカルで確認
 npm run lint       # oxlint
 npm run typecheck  # tsc -b
+npm run format     # Prettier で整形
 ```
 
 開発サーバは `http://localhost:5173/monmana/` で開く。
@@ -197,6 +198,12 @@ design/
 
 **依存の向き**: `ui` → `domain` / `storage`。逆向きの import をしないこと。
 `domain` は `storage` の実装を知らず、インターフェース越しに受け取る。
+
+### 整形
+
+Prettier を使う。**ただし Markdown は整形しない**（`.prettierignore`）。
+ADR-0003 の「Accepted な ADR は書き換えない」と衝突するのと、
+日本語の表がパディングされると文字列置換での更新が壊れやすくなるため。
 
 ### スタイルの書き方
 
