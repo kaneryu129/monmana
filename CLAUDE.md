@@ -33,6 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | モンステラの画風 | 手描き風（輪郭をずらした層でにじみを作る） | [0008](docs/adr/0008-plant-art-style.md) |
 | リンタ | oxlint（ESLint に差し替えない） | [0009](docs/adr/0009-linter-oxlint.md) |
 | SPA の直リンク | 404.html フォールバック（HashRouter を使わない） | [0010](docs/adr/0010-spa-routing-on-pages.md) |
+| テーマ | ライト固定。ダークテーマを持たない | [0011](docs/adr/0011-light-theme-only.md) |
 
 ### 対応環境と確認方針
 
@@ -188,7 +189,7 @@ src/
   ui/         画面と部品。React に依存してよい唯一の層
     screens/
     components/
-  styles/     デザイントークン（#7 で整備）
+  styles/     デザイントークン（tokens.css）
 design/
   plant/      モンステラの図形と生成スクリプト
   screens/    画面モックアップと生成スクリプト
@@ -196,3 +197,9 @@ design/
 
 **依存の向き**: `ui` → `domain` / `storage`。逆向きの import をしないこと。
 `domain` は `storage` の実装を知らず、インターフェース越しに受け取る。
+
+### スタイルの書き方
+
+**色・余白・文字サイズは `src/styles/tokens.css` の変数から取る。直接書かない。**
+値の出どころは `design/screens/mockups.html`（#53 で確定）。
+モックアップとずれたら、どちらが正か決めてから直すこと。

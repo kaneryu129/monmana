@@ -69,3 +69,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0008](0008-plant-art-style.md) | モンステラの画風は手描き風とする | Accepted |
 | [0009](0009-linter-oxlint.md) | リンタは oxlint を使う | Accepted |
 | [0010](0010-spa-routing-on-pages.md) | SPA の直リンク対策は 404.html フォールバックとする | Accepted |
+| [0011](0011-light-theme-only.md) | アプリはライトテーマ固定とする | Accepted |
