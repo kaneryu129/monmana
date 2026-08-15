@@ -33,22 +33,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### 対応環境と確認方針
 
-開発は macOS の Chrome で行い、リリース前に実機で確認する。
+開発環境は **Mac**、実機確認は **iPhone**。確認は以下の 2 環境で行う（ADR-0007）。
+
+| 環境 | 位置づけ | 確認 |
+| --- | --- | --- |
+| Chrome (macOS) | 開発とデバッグの主環境 | 常時 |
+| iPhone（ホーム画面に追加した状態） | 実利用の主環境。**WebKit の唯一の検証点** | 早期かつ継続的に |
+| Safari (macOS) | 確認対象外（開発者が使用していない） | 行わない |
+| Android Chrome | 対応するが実機がないため未検証 | 行わない |
 
 **「Chrome で動いた」を「iPhone で動く」の保証にしてはいけない。**
-以下は iOS Safari 固有の制約であり、デスクトップ Chrome では一切再現しない。
+以下は iOS 固有の制約であり、デスクトップ Chrome では一切再現しない。
 
-| 制約 | デスクトップ Chrome | iOS Safari |
+| 制約 | デスクトップ Chrome | iPhone |
 | --- | --- | --- |
 | 7 日間の無操作でストレージ削除 | 起きない | 起きる（ホーム画面追加で回避） |
 | `navigator.vibrate()` | 動作する | 非対応 |
 | 音声の自動再生制限 | 緩い | 厳しい（要 unlock） |
 
+**iPhone 上のブラウザは、何を使っても Safari (WebKit) である。**
+macOS の Safari を確認対象から外したのは手順の簡略化であり、
+iOS の制約が消えたわけではない。この区別を取り違えないこと。
+
 終了音・バイブレーション・PWA 化・ホーム画面追加に関わる実装は、
-**実機で確認するまで完了としない。**
+**iPhone で確認するまで完了としない。**
 
 なお、バックグラウンドでのタイマー精度は Chrome でもスロットリングが再現するため、
 デスクトップで検証してよい。
+
+iPhone 上の問題の調査には Mac の Safari Web Inspector を使う
+（iPhone 側で 設定 > Safari > 詳細 > Web インスペクタ をオンにし、USB 接続）。
+Safari は「確認環境」としては使わないが、「デバッグ道具」としては使う。
 
 ### 実装上、特に注意すべき制約
 

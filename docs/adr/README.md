@@ -65,3 +65,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0004](0004-tech-stack.md) | 技術スタックは Vite + React + TypeScript とする | Accepted |
 | [0005](0005-hosting-github-pages.md) | ホスティングは GitHub Pages とする | Accepted |
 | [0006](0006-target-environments.md) | 対応環境はデスクトップ Chrome とモバイルの両方とする | Accepted |
+| [0007](0007-verification-strategy.md) | 動作確認は Chrome (macOS) と iPhone の 2 環境で行う | Accepted |
