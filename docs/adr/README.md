@@ -70,3 +70,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0009](0009-linter-oxlint.md) | リンタは oxlint を使う | Accepted |
 | [0010](0010-spa-routing-on-pages.md) | SPA の直リンク対策は 404.html フォールバックとする | Accepted |
 | [0011](0011-light-theme-only.md) | アプリはライトテーマ固定とする | Accepted |
+| [0012](0012-day-boundary-at-4am.md) | 一日の境界を午前 4 時とする | Accepted |

@@ -34,6 +34,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | リンタ | oxlint（ESLint に差し替えない） | [0009](docs/adr/0009-linter-oxlint.md) |
 | SPA の直リンク | 404.html フォールバック（HashRouter を使わない） | [0010](docs/adr/0010-spa-routing-on-pages.md) |
 | テーマ | ライト固定。ダークテーマを持たない | [0011](docs/adr/0011-light-theme-only.md) |
+| 一日の境界 | 午前 4 時。深夜の学習は前日ぶん | [0012](docs/adr/0012-day-boundary-at-4am.md) |
 
 ### 対応環境と確認方針
 
@@ -79,6 +80,9 @@ Safari は「確認環境」としては使わないが、「デバッグ道具�
   対応環境でのみ振動させ、非対応環境は音のみで完了を知らせる
 - **ドメインロジックは UI から独立させる。** 純粋な TypeScript として書き、React に依存させない
 - **ストレージアクセスは抽象化層を挟む。** ドメインロジックから IndexedDB を直接触らない
+- **日付は `src/domain/dateKey.ts` 経由で扱う。** 一日の境界は午前 4 時（ADR-0012）。
+  `new Date().getDate()` で直接判定しない。日数の差はミリ秒の割り算で求めない（夏時間）
+- **セッションの `dateKey` は保存時に確定させる。** 後から `startedAt` から導出し直さない
 
 ### 図を描くときの必須手順（ADR-0008）
 
