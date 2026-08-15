@@ -31,6 +31,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | ホスティング | GitHub Pages + GitHub Actions | [0005](docs/adr/0005-hosting-github-pages.md) |
 | 対応環境 | デスクトップ Chrome + iOS Safari + Android Chrome | [0006](docs/adr/0006-target-environments.md) |
 | モンステラの画風 | 手描き風（輪郭をずらした層でにじみを作る） | [0008](docs/adr/0008-plant-art-style.md) |
+| リンタ | oxlint（ESLint に差し替えない） | [0009](docs/adr/0009-linter-oxlint.md) |
 
 ### 対応環境と確認方針
 
@@ -153,4 +154,44 @@ Issue 駆動で進める。詳細は ADR-0003。
 
 ## コマンド
 
-プロジェクト初期化前のため未定。セットアップ完了後に追記すること。
+```sh
+npm run dev        # 開発サーバ。--host 付きなので LAN の iPhone からも見える
+npm run build      # 型検査 + 本番ビルド
+npm run preview    # ビルド結果をローカルで確認
+npm run lint       # oxlint
+npm run typecheck  # tsc -b
+```
+
+開発サーバは `http://localhost:5173/monmana/` で開く。
+**サブパス `/monmana/` が付く**ので注意（GitHub Pages に合わせている。ADR-0005）。
+
+iPhone から見るときは、起動時に表示される `Network:` の URL を使う（ADR-0007）。
+
+### 既知の問題
+
+`~/.npm` に root 所有のファイルが混在しており、`npm install` が
+`ERESOLVE` で失敗することがある（#55）。回避策は別キャッシュの指定。
+
+```sh
+npm install --cache /tmp/npm-cache
+```
+
+恒久対応には `sudo chown -R 501:20 ~/.npm` が必要。
+
+## ディレクトリ構成
+
+```
+src/
+  domain/     学習ロジック。React に依存させない（ADR-0001）
+  storage/    永続化。IndexedDB を直接触らせない（ADR-0002）
+  ui/         画面と部品。React に依存してよい唯一の層
+    screens/
+    components/
+  styles/     デザイントークン（#7 で整備）
+design/
+  plant/      モンステラの図形と生成スクリプト
+  screens/    画面モックアップと生成スクリプト
+```
+
+**依存の向き**: `ui` → `domain` / `storage`。逆向きの import をしないこと。
+`domain` は `storage` の実装を知らず、インターフェース越しに受け取る。
