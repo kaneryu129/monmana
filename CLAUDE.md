@@ -30,6 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 技術スタック | Vite + React + TypeScript | [0004](docs/adr/0004-tech-stack.md) |
 | ホスティング | GitHub Pages + GitHub Actions | [0005](docs/adr/0005-hosting-github-pages.md) |
 | 対応環境 | デスクトップ Chrome + iOS Safari + Android Chrome | [0006](docs/adr/0006-target-environments.md) |
+| モンステラの画風 | 手描き風（輪郭をずらした層でにじみを作る） | [0008](docs/adr/0008-plant-art-style.md) |
 
 ### 対応環境と確認方針
 
@@ -75,6 +76,17 @@ Safari は「確認環境」としては使わないが、「デバッグ道具�
   対応環境でのみ振動させ、非対応環境は音のみで完了を知らせる
 - **ドメインロジックは UI から独立させる。** 純粋な TypeScript として書き、React に依存させない
 - **ストレージアクセスは抽象化層を挟む。** ドメインロジックから IndexedDB を直接触らない
+
+### 図を描くときの必須手順（ADR-0008）
+
+- **描いたら必ず画像に書き出して目視する。** 座標を書いただけで完了としない
+  ```sh
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless --disable-gpu --screenshot=out.png --window-size=1300,2100 "file://$PWD/<file>"
+  ```
+- **`<use>` で `<symbol>` を参照すると影の DOM が作られ、子孫セレクタは境界を越えられない。**
+  色や線幅は CSS カスタムプロパティで渡すこと（これは継承される）
+- モンステラの図形は `design/plant/src/` のスクリプトが生成する。**HTML を直接編集しない**
 
 ## 開発フロー
 
