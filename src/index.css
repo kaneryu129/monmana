@@ -26,8 +26,8 @@ body {
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   /* ホーム画面から起動したときのセーフエリア（ADR-0007） */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
 
 h1,

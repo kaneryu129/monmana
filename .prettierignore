@@ -1,0 +1,18 @@
+dist
+node_modules
+package-lock.json
+
+# Markdown は整形しない。
+#
+# 理由が 2 つある。
+# 1. ADR-0003 で「Accepted な ADR は書き換えない」と定めている。
+#    整形ツールが機械的に触ると、その原則と衝突する。
+# 2. 日本語の表がパディングされると、文字列置換での更新が壊れやすくなる。
+#    CLAUDE.md や ADR 索引は追記のたびに機械的に書き換えている。
+#
+# 表示結果は変わらないため、整形して得られるものが少ない。
+**/*.md
+
+# 生成物。元のスクリプトを直すこと（ADR-0008）
+design/plant/style-exploration.html
+design/screens/mockups.html
