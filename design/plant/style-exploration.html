@@ -1,0 +1,538 @@
+<!-- @dsCard group="Plant" -->
+<title>モンステラ画風スタディ</title>
+<style>
+  :root {
+    /* 製品の色（仕様書 13 章）— テーマに関わらず不変。標本はこの色で見せる */
+    --paper:       #FBF9F3;
+    --paper-edge:  #EDE7D9;
+    --green-deep:  #2C5340;
+    --green-mid:   #4A7E5E;
+    --green-soft:  #7FA98C;
+    --green-pale:  #B4CEBC;
+    --varie:       #F5F8EC;
+    --varie-warm:  #D8E6BA;
+    --soil:        #5D5247;
+    --soil-soft:   #786A5B;
+    --pot:         #C6B5A1;
+    --pot-dark:    #AB9880;
+
+    /* ページ側の色（テーマで変わる） */
+    --page-bg:     #F5F3EC;
+    --surface:     #FFFFFF;
+    --ink:         #262F29;
+    --ink-soft:    #66706A;
+    --ink-faint:   #97A099;
+    --rule:        #E1DDD1;
+    --accent:      #2C5340;
+
+    --font-display: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Songti SC", serif;
+    --font-body:    "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", system-ui, sans-serif;
+
+    --step--1: 0.8125rem;
+    --step-0:  0.9375rem;
+    --step-1:  1.125rem;
+    --step-2:  1.5rem;
+    --step-3:  2.125rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg:   #171A17;
+      --surface:   #1F231F;
+      --ink:       #E7EAE3;
+      --ink-soft:  #A0A89E;
+      --ink-faint: #737B72;
+      --rule:      #31362F;
+      --accent:    #93BC9E;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --page-bg:   #171A17;
+    --surface:   #1F231F;
+    --ink:       #E7EAE3;
+    --ink-soft:  #A0A89E;
+    --ink-faint: #737B72;
+    --rule:      #31362F;
+    --accent:    #93BC9E;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 74rem;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem) 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 6vw, 5rem);
+  }
+
+  /* ── header ───────────────────────────────── */
+
+  header { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .eyebrow {
+    font-size: var(--step--1);
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .lead {
+    max-width: 34em;
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .constraints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .constraints li {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 0.25rem 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* ── style row ────────────────────────────── */
+
+  .style {
+    display: grid;
+    grid-template-columns: minmax(14rem, 20rem) 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--rule);
+  }
+
+  .style__intro { display: flex; flex-direction: column; gap: 1rem; }
+
+  .style__name {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+
+  .style__index {
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+
+  .style__note { margin: 0; color: var(--ink-soft); font-size: var(--step-0); }
+
+  .traits { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .traits div { display: flex; flex-direction: column; gap: 0.1rem; }
+
+  .traits dt {
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+  }
+
+  .traits dd {
+    margin: 0;
+    font-size: var(--step--1);
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+
+  /* ── specimens ────────────────────────────── */
+
+  .specimens {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+    align-content: start;
+  }
+
+  .specimen { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .specimen__frame {
+    /* 製品の紙色。ページのテーマに引きずられない */
+    background: var(--paper);
+    border: 1px solid var(--paper-edge);
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0.5rem 0.5rem;
+  }
+
+  .specimen svg { width: 100%; height: auto; max-width: 11rem; display: block; }
+
+  .specimen__label { display: flex; flex-direction: column; gap: 0.05rem; }
+
+  .specimen__lv {
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .specimen__name { font-size: var(--step--1); color: var(--ink-faint); }
+
+  /* ── 画風ごとの描き分け ─────────────────────
+     図形データは 3 案で共通。塗りと線の扱いだけを変える。 */
+
+  .ghost { display: none; }
+
+  /* 共通の土台 */
+  .soil    { fill: var(--soil); }
+  .pot     { fill: var(--pot); }
+  .pot-rim { fill: var(--pot-dark); }
+
+  /* A. フラット / ミニマル */
+  .flat .leaf     { fill: var(--green-mid); stroke: none; }
+  .flat .leaf--back { fill: var(--green-deep); }
+  .flat .stem     { fill: none; stroke: var(--green-deep); stroke-width: 3; stroke-linecap: round; }
+  .flat .midrib   { fill: none; stroke: var(--paper); stroke-width: 1.4; stroke-linecap: round; opacity: 0.55; }
+  .flat .vein     { display: none; }
+  .flat .varie    { fill: var(--varie); }
+  .flat .varie--warm { fill: var(--varie-warm); }
+
+  /* B. 線画 */
+  .line .leaf     { fill: var(--paper); stroke: var(--green-deep); stroke-width: 2; stroke-linejoin: round; }
+  .line .leaf--back { fill: var(--paper); }
+  .line .stem     { fill: none; stroke: var(--green-deep); stroke-width: 2; stroke-linecap: round; }
+  .line .midrib   { fill: none; stroke: var(--green-deep); stroke-width: 1.4; stroke-linecap: round; }
+  .line .vein     { fill: none; stroke: var(--green-soft); stroke-width: 1; stroke-linecap: round; }
+  .line .varie    { fill: none; stroke: var(--green-soft); stroke-width: 1; stroke-dasharray: 3 3; }
+  .line .varie--warm { fill: none; stroke: var(--green-soft); }
+  .line .soil     { fill: none; stroke: var(--soil); stroke-width: 2; }
+  .line .pot      { fill: none; stroke: var(--soil); stroke-width: 2; stroke-linejoin: round; }
+  .line .pot-rim  { fill: none; stroke: var(--soil); stroke-width: 2; stroke-linejoin: round; }
+
+  /* C. 手描き風 — 輪郭をわずかにずらした層を重ね、にじみを作る */
+  .hand .ghost    { display: block; opacity: 0.4; transform: translate(1.6px, 1.8px); }
+  .hand .leaf     { fill: var(--green-mid); stroke: var(--green-deep); stroke-width: 1.2; stroke-linejoin: round; opacity: 0.9; }
+  .hand .leaf--back { fill: var(--green-deep); opacity: 0.85; }
+  .hand .stem     { fill: none; stroke: var(--green-deep); stroke-width: 2.6; stroke-linecap: round; opacity: 0.9; }
+  .hand .midrib   { fill: none; stroke: var(--green-deep); stroke-width: 1.1; stroke-linecap: round; opacity: 0.5; }
+  .hand .vein     { fill: none; stroke: var(--green-deep); stroke-width: 0.8; stroke-linecap: round; opacity: 0.35; }
+  .hand .varie    { fill: var(--varie); opacity: 0.92; }
+  .hand .varie--warm { fill: var(--varie-warm); opacity: 0.8; }
+  .hand .soil     { fill: var(--soil); opacity: 0.9; }
+  .hand .pot      { fill: var(--pot); stroke: var(--soil); stroke-width: 1.2; opacity: 0.95; }
+  .hand .pot-rim  { fill: var(--pot-dark); opacity: 0.9; }
+
+  /* ── closing ──────────────────────────────── */
+
+  .closing {
+    border-top: 1px solid var(--rule);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 42em;
+  }
+
+  .closing h2 {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin: 0;
+  }
+
+  .closing p { margin: 0; color: var(--ink-soft); }
+
+  .closing ol { margin: 0; padding-left: 1.3em; color: var(--ink-soft); display: flex; flex-direction: column; gap: 0.4rem; }
+
+  @media (max-width: 46rem) {
+    .style { grid-template-columns: 1fr; }
+    .specimens { grid-template-columns: 1fr; gap: 1.5rem; }
+    .specimen svg { max-width: 13rem; }
+  }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Lv.1 はじまりの芽 — 土と小さな芽 -->
+    <symbol id="stage-1" viewBox="0 0 200 260">
+      <g transform="translate(100,185)">
+        <path class="pot" d="M -33,-1 L -26,46 Q -25,52 -19,52 L 19,52 Q 25,52 26,46 L 33,-1 Z"/>
+        <path class="pot-rim" d="M -36,-9 L 36,-9 L 33,-1 L -33,-1 Z"/>
+        <ellipse class="soil" cx="0" cy="-6" rx="32" ry="6"/>
+        <path class="stem" d="M 0,-8 C -1,-16 0,-22 1,-27"/>
+        <path class="leaf" d="M 1,-27 C -5,-35 -4,-45 2,-51 C 8,-45 7,-35 1,-27 Z"/>
+        <path class="midrib" d="M 1.6,-30 L 2,-46"/>
+      </g>
+    </symbol>
+
+    <!-- Lv.5 育ちざかり — 茎と葉が大きくなる。切れ込みはまだ無い -->
+    <symbol id="stage-5" viewBox="0 0 200 260">
+      <g transform="translate(100,185)">
+        <path class="pot" d="M -33,-1 L -26,46 Q -25,52 -19,52 L 19,52 Q 25,52 26,46 L 33,-1 Z"/>
+        <path class="pot-rim" d="M -36,-9 L 36,-9 L 33,-1 L -33,-1 Z"/>
+        <ellipse class="soil" cx="0" cy="-6" rx="32" ry="6"/>
+
+        <path class="stem" d="M 0,-8 C -3,-18 -8,-26 -14,-32"/>
+        <path class="stem" d="M 0,-8 C 3,-20 9,-28 15,-35"/>
+        <path class="stem" d="M 0,-8 C 0,-24 1,-34 1,-44"/>
+
+        <g transform="translate(-14,-32) rotate(-26) scale(0.54)">
+          <path class="leaf leaf--back" d="M 0,-2 C -13,-12 -23,-30 -23,-49 C -23,-68 -12,-82 0,-88 C 12,-82 23,-68 23,-49 C 23,-30 13,-12 0,-2 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-82"/>
+          <path class="vein" d="M 0,-28 L -13,-38 M 0,-28 L 13,-38 M 0,-48 L -12,-60 M 0,-48 L 12,-60"/>
+        </g>
+
+        <g transform="translate(15,-35) rotate(24) scale(0.58)">
+          <path class="leaf" d="M 0,-2 C -13,-12 -23,-30 -23,-49 C -23,-68 -12,-82 0,-88 C 12,-82 23,-68 23,-49 C 23,-30 13,-12 0,-2 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-82"/>
+          <path class="vein" d="M 0,-28 L -13,-38 M 0,-28 L 13,-38 M 0,-48 L -12,-60 M 0,-48 L 12,-60"/>
+        </g>
+
+        <g transform="translate(1,-44) rotate(-4) scale(0.64)">
+          <path class="leaf" d="M 0,-2 C -13,-12 -23,-30 -23,-49 C -23,-68 -12,-82 0,-88 C 12,-82 23,-68 23,-49 C 23,-30 13,-12 0,-2 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-82"/>
+          <path class="vein" d="M 0,-28 L -13,-38 M 0,-28 L 13,-38 M 0,-48 L -12,-60 M 0,-48 L 12,-60"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- Lv.10 斑入りモンステラ — 深い切れ込みと、はじめての白い斑 -->
+    <symbol id="stage-10" viewBox="0 0 200 260">
+      <g transform="translate(100,185)">
+        <path class="pot" d="M -36,-1 L -29,44 Q -28,52 -20,52 L 20,52 Q 28,52 29,44 L 36,-1 Z"/>
+        <path class="pot-rim" d="M -39,-10 L 39,-10 L 36,-1 L -36,-1 Z"/>
+        <ellipse class="soil" cx="0" cy="-7" rx="35" ry="6"/>
+
+        <path class="stem" d="M 0,-9 C -6,-20 -16,-28 -26,-33"/>
+        <path class="stem" d="M 0,-9 C -3,-26 -8,-38 -14,-48"/>
+        <path class="stem" d="M 0,-9 C 4,-24 11,-34 18,-44"/>
+        <path class="stem" d="M 0,-9 C 0,-30 1,-46 2,-60"/>
+
+        <g transform="translate(-26,-33) rotate(-42) scale(0.56)">
+          <path class="leaf leaf--back" d="M 0,-2 C -14,-14 -24,-28 -26,-42 L -9,-47 L -27,-55 C -27,-68 -22,-79 -14,-86 L -5,-74 L -11,-89 C -7,-91 -4,-92 0,-92 C 4,-92 7,-91 11,-89 L 5,-74 L 14,-86 C 22,-79 27,-68 27,-55 L 9,-47 L 26,-42 C 24,-28 14,-14 0,-2 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-86"/>
+        </g>
+
+        <g transform="translate(-14,-48) rotate(-18) scale(0.68)">
+          <path class="leaf" d="M 0,-2 C -14,-14 -24,-28 -26,-42 L -9,-47 L -27,-55 C -27,-68 -22,-79 -14,-86 L -5,-74 L -11,-89 C -7,-91 -4,-92 0,-92 C 4,-92 7,-91 11,-89 L 5,-74 L 14,-86 C 22,-79 27,-68 27,-55 L 9,-47 L 26,-42 C 24,-28 14,-14 0,-2 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-86"/>
+          <path class="vein" d="M 0,-32 L -14,-42 M 0,-32 L 14,-42 M 0,-58 L -12,-70 M 0,-58 L 12,-70"/>
+        </g>
+
+        <g transform="translate(18,-44) rotate(22) scale(0.66)">
+          <path class="leaf" d="M 0,-2 C -14,-14 -24,-28 -26,-42 L -9,-47 L -27,-55 C -27,-68 -22,-79 -14,-86 L -5,-74 L -11,-89 C -7,-91 -4,-92 0,-92 C 4,-92 7,-91 11,-89 L 5,-74 L 14,-86 C 22,-79 27,-68 27,-55 L 9,-47 L 26,-42 C 24,-28 14,-14 0,-2 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-86"/>
+          <path class="vein" d="M 0,-32 L -14,-42 M 0,-32 L 14,-42 M 0,-58 L -12,-70 M 0,-58 L 12,-70"/>
+        </g>
+
+        <!-- 斑入りの一枚 -->
+        <g transform="translate(2,-60) rotate(2) scale(0.76)">
+          <path class="leaf" d="M 0,-2 C -14,-14 -24,-28 -26,-42 L -9,-47 L -27,-55 C -27,-68 -22,-79 -14,-86 L -5,-74 L -11,-89 C -7,-91 -4,-92 0,-92 C 4,-92 7,-91 11,-89 L 5,-74 L 14,-86 C 22,-79 27,-68 27,-55 L 9,-47 L 26,-42 C 24,-28 14,-14 0,-2 Z"/>
+          <path class="varie" d="M -2,-86 C -9,-79 -16,-68 -17,-56 C -13,-53 -8,-55 -5,-59 C -3,-69 -2,-78 -2,-86 Z"/>
+          <path class="varie varie--warm" d="M 6,-38 C 11,-36 15,-32 16,-27 C 12,-22 7,-22 4,-26 C 4,-31 5,-35 6,-38 Z"/>
+          <path class="midrib" d="M 0,-6 L 0,-86"/>
+          <path class="vein" d="M 0,-32 L -14,-42 M 0,-32 L 14,-42 M 0,-58 L -12,-70 M 0,-58 L 12,-70"/>
+        </g>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">モンまな ／ デザイン検討</p>
+    <h1>モンステラの画風、三案</h1>
+    <p class="lead">
+      実装に入る前に画風を一つ決めます。三案とも図形データは共通で、塗りと線の扱いだけを変えています。
+      形ではなく画風そのものを見比べられます。
+    </p>
+    <ul class="constraints">
+      <li>白・淡いベージュ基調／深い緑がアクセント</li>
+      <li>全 11 段階を作り分ける</li>
+      <li>インライン SVG + CSS</li>
+      <li>Lv.7 まで切れ込みは入らない</li>
+    </ul>
+  </header>
+
+  <!-- ───────── A. フラット ───────── -->
+  <section class="style flat">
+    <div class="style__intro">
+      <h2 class="style__name"><span class="style__index">案 A</span>フラット</h2>
+      <p class="style__note">単色の面で構成する。輪郭線を持たず、葉の重なりは緑の濃淡だけで表す。</p>
+      <dl class="traits">
+        <div>
+          <dt>見え方</dt>
+          <dd>小さくしても形が潰れない。ホーム画面の小さなプレビューで最も強い。</dd>
+        </div>
+        <div>
+          <dt>11 段階の作り分け</dt>
+          <dd>葉を足すだけで段階が進む。斑は面を重ねるだけで表現でき、破綻しにくい。</dd>
+        </div>
+        <div>
+          <dt>リスク</dt>
+          <dd>整いすぎて素っ気なく映る可能性がある。愛着の湧きにくさが弱点。</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="specimens">
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="フラット画風の Lv.1 モンステラ"><use href="#stage-1"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.1</span>
+          <span class="specimen__name">はじまりの芽</span>
+        </figcaption>
+      </figure>
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="フラット画風の Lv.5 モンステラ"><use href="#stage-5"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.5</span>
+          <span class="specimen__name">育ちざかり</span>
+        </figcaption>
+      </figure>
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="フラット画風の Lv.10 モンステラ"><use href="#stage-10"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.10</span>
+          <span class="specimen__name">斑入りモンステラ</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ───────── B. 線画 ───────── -->
+  <section class="style line">
+    <div class="style__intro">
+      <h2 class="style__name"><span class="style__index">案 B</span>線画</h2>
+      <p class="style__note">細い線で輪郭と葉脈を描き、内側は紙の色のまま残す。植物図鑑に近い佇まい。</p>
+      <dl class="traits">
+        <div>
+          <dt>見え方</dt>
+          <dd>余白がそのまま画の一部になる。仕様書の「静か・清潔感」に最も忠実。</dd>
+        </div>
+        <div>
+          <dt>11 段階の作り分け</dt>
+          <dd>葉脈と切れ込みの描き込み量で段階を表せる。緑の面積が増えないぶん、成長の実感は出しにくい。</dd>
+        </div>
+        <div>
+          <dt>リスク</dt>
+          <dd>小さく表示すると線が細って見えにくい。ホーム画面のプレビューで線幅の調整が要る。</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="specimens">
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="線画の Lv.1 モンステラ"><use href="#stage-1"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.1</span>
+          <span class="specimen__name">はじまりの芽</span>
+        </figcaption>
+      </figure>
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="線画の Lv.5 モンステラ"><use href="#stage-5"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.5</span>
+          <span class="specimen__name">育ちざかり</span>
+        </figcaption>
+      </figure>
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="線画の Lv.10 モンステラ"><use href="#stage-10"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.10</span>
+          <span class="specimen__name">斑入りモンステラ</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ───────── C. 手描き風 ───────── -->
+  <section class="style hand">
+    <div class="style__intro">
+      <h2 class="style__name"><span class="style__index">案 C</span>手描き風</h2>
+      <p class="style__note">輪郭をわずかにずらした層を重ね、刷りのにじみを作る。均一でない分だけ体温が出る。</p>
+      <dl class="traits">
+        <div>
+          <dt>見え方</dt>
+          <dd>三案で最も温かい。毎日眺める相手としての愛着は湧きやすい。</dd>
+        </div>
+        <div>
+          <dt>11 段階の作り分け</dt>
+          <dd>にじみの位置を段階ごとに決める必要があり、一貫性の管理が最も重い。</dd>
+        </div>
+        <div>
+          <dt>リスク</dt>
+          <dd>要素が増えるため SVG が重くなる。小さい表示ではにじみが濁りに見える。</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="specimens">
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="手描き風の Lv.1 モンステラ"><use href="#stage-1" class="ghost"/><use href="#stage-1"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.1</span>
+          <span class="specimen__name">はじまりの芽</span>
+        </figcaption>
+      </figure>
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="手描き風の Lv.5 モンステラ"><use href="#stage-5" class="ghost"/><use href="#stage-5"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.5</span>
+          <span class="specimen__name">育ちざかり</span>
+        </figcaption>
+      </figure>
+      <figure class="specimen">
+        <div class="specimen__frame"><svg viewBox="0 0 200 260" role="img" aria-label="手描き風の Lv.10 モンステラ"><use href="#stage-10" class="ghost"/><use href="#stage-10"/></svg></div>
+        <figcaption class="specimen__label">
+          <span class="specimen__lv">Lv.10</span>
+          <span class="specimen__name">斑入りモンステラ</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="closing">
+    <h2>選ぶときの見どころ</h2>
+    <p>
+      三案とも Lv.5 の葉に切れ込みはありません。仕様書では Lv.7 で最初の切れ込みが入るためです。
+      Lv.1 から Lv.10 への変化が「育った」と感じられるかを、横に並べて確かめてください。
+    </p>
+    <ol>
+      <li>ホーム画面では、この 3 分の 1 ほどの大きさで表示されます。小ささに耐えるか。</li>
+      <li>Lv.10 の白い斑が、それまでの段階と比べて特別に見えるか。</li>
+      <li>毎日目にする相手として、眺めていたいと思えるか。</li>
+    </ol>
+    <p>
+      決まった案とその理由は ADR に記録し、残り 8 段階の作図に進みます。
+    </p>
+  </section>
+
+</div>
