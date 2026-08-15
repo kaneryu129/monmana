@@ -129,14 +129,18 @@ export function recordSession(
     })
   }
 
+  // exactOptionalPropertyTypes が有効なため、undefined を明示的に代入できない。
+  // 値があるときだけキーを置く。
+  const lastStudiedOn = counted ? dateKey : growth.lastStudiedOn
+
   return {
     session,
     growth: {
       totalDrops,
       totalMinutes: growth.totalMinutes + minutes,
-      lastStudiedOn: counted ? dateKey : growth.lastStudiedOn,
       streakDays,
       milestones,
+      ...(lastStudiedOn !== undefined ? { lastStudiedOn } : {}),
     },
     leveledUp,
     previousLevel,

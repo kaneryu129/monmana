@@ -167,7 +167,12 @@ npm run preview    # ビルド結果をローカルで確認
 npm run lint       # oxlint
 npm run typecheck  # tsc -b
 npm run format     # Prettier で整形
+npm run verify     # 型検査 + Lint + 整形確認 + テスト をまとめて実行
 ```
+
+**コミット前は `npm run verify` を使う。**
+個別コマンドを `| tail` などに繋ぐと、パイプの終了ステータスが後段のものになり、
+**失敗を握りつぶす**。実際に型エラーを見落としてコミットした事故がある。
 
 開発サーバは `http://localhost:5173/monmana/` で開く。
 **サブパス `/monmana/` が付く**ので注意（GitHub Pages に合わせている。ADR-0005）。
