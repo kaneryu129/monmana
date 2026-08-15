@@ -90,3 +90,41 @@ output,
   color: var(--c-ink-faint);
   letter-spacing: var(--tracking-wide);
 }
+
+.boot__stats {
+  margin: var(--space-5) 0 0;
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 20rem;
+}
+
+.boot__stats div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--c-edge);
+  padding-bottom: var(--space-1);
+}
+
+.boot__stats dt {
+  font-size: var(--text-xs);
+  color: var(--c-ink-faint);
+  letter-spacing: var(--tracking-wider);
+}
+
+.boot__stats dd {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--c-green);
+  font-variant-numeric: tabular-nums;
+}
+
+.boot__btn {
+  margin-top: var(--space-5);
+  border: 1px solid var(--c-edge);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--c-green);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-sm);
+}
