@@ -1,0 +1,22 @@
+/*
+ * 暫定のベーススタイル。
+ * デザイントークン（配色・余白・文字）は Issue #7 で styles/tokens.css に定義する。
+ * ここに値を増やさないこと。
+ */
+
+:root {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+  line-height: 1.85;
+  color: #2a312c;
+  background-color: #fbf9f3;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}

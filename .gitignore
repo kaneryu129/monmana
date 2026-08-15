@@ -1,1 +1,10 @@
 .claude/settings.local.json
+
+# Node / Vite
+node_modules
+dist
+dist-ssr
+*.local
+*.log
+.DS_Store
+coverage
