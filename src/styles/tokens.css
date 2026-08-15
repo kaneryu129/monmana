@@ -1,0 +1,107 @@
+/*
+ * デザイントークン
+ *
+ * 仕様書 13 章の世界観「静か / やさしい / 清潔感がある / 余白が多い」を、
+ * 場当たりな CSS ではなく名前のついた値として一箇所に定義する。
+ *
+ * 値の出どころは design/screens/mockups.html（#53 で確定）。
+ * モックアップとずれたら、どちらが正か決めてから直すこと。
+ *
+ * 画面の CSS では必ずこの変数を使い、色・余白・文字サイズを直接書かない。
+ *
+ * ライトテーマ固定。ダークテーマは持たない（ADR-0011）。
+ */
+
+:root {
+  /* ── 地の色 ──────────────────────────────
+   * 白と淡いベージュを基調にする（仕様書 13 章）。
+   * モンステラの緑と白斑はこの紙色の上で成立するよう設計されている。 */
+  --c-paper: #fbf9f3; /* 画面の地。すべての背景の基準 */
+  --c-paper-sunk: #f4f0e6; /* 一段沈んだ面。カードの地など */
+  --c-surface: #ffffff; /* 浮いた面。統計タイルや入力欄 */
+  --c-edge: #e7e0d0; /* 罫線と枠。主張させない */
+
+  /* ── 文字 ────────────────────────────────
+   * 純粋な灰色は使わない。緑に寄せた無彩色にして、地の色となじませる。 */
+  --c-ink: #2a312c; /* 本文。緑寄りの暗色 */
+  --c-ink-soft: #6b746d; /* 補足。読ませるが主役ではない */
+  --c-ink-faint: #9aa298; /* ラベル、日付。存在を示す程度 */
+
+  /* ── 緑（アクセント） ─────────────────────
+   * 深い緑を主なアクセントにする（仕様書 13 章）。 */
+  --c-green: #2c5340; /* 主ボタン、数値、見出し */
+  --c-green-mid: #3f7355; /* 補助的な緑 */
+  --c-green-pale: #e4ede5; /* 選択中のカテゴリなど、面で置く緑 */
+
+  /* ── モンステラ ───────────────────────────
+   * design/plant/src/build.py の手描き風（ADR-0008）と同じ値。
+   * 葉は緑、斑は白。 */
+  --c-leaf: #2f6b45;
+  --c-leaf-far: #1e4a31; /* 奥の葉。濃く */
+  --c-leaf-near: #4c8b5e; /* 手前の葉。明るく */
+  --c-leaf-line: #1a3f2a; /* 葉の輪郭 */
+  --c-variegation: #ffffff; /* 白斑。Lv.10 の見せ場 */
+  --c-soil: #46372a;
+  --c-pot: #5c4534;
+  --c-pot-dark: #463527;
+
+  /* ── 文字組み ────────────────────────────
+   * 明朝を見出しに使い、静けさを出す。
+   * 日本語フォントは実体が大きく CDN も使えないため、システムフォントに頼る。 */
+  --font-display: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  --font-body: "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", system-ui, sans-serif;
+
+  --text-xs: 0.6875rem; /* 11px ラベル、日付 */
+  --text-sm: 0.75rem; /* 12px 補足、記録一覧 */
+  --text-base: 0.875rem; /* 14px 本文 */
+  --text-md: 0.9375rem; /* 15px ボタン */
+  --text-lg: 1.1875rem; /* 19px 統計の数値、画面名 */
+  --text-xl: 1.4375rem; /* 23px 完了メッセージ */
+  --text-2xl: 1.5625rem; /* 25px レベルアップ */
+  --text-clock: 4.75rem; /* 76px タイマーの残り時間 */
+
+  --leading-tight: 1.3;
+  --leading-normal: 1.85; /* 既定。行間を広く取り、余白を作る */
+  --leading-loose: 1.9; /* 明朝の文章 */
+
+  --tracking-tight: 0.02em;
+  --tracking-normal: 0.04em;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.14em; /* ラベル、ブランド名 */
+
+  /* ── 余白 ────────────────────────────────
+   * 余白が多いことが世界観の一部（仕様書 13 章）。
+   * 迷ったら広いほうを選ぶ。 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.625rem; /* 画面の左右余白 */
+  --space-8: 2rem;
+  --space-10: 2.75rem;
+
+  /* ── 形 ──────────────────────────────────*/
+  --radius-sm: 10px; /* 入力欄、統計タイル */
+  --radius-md: 14px; /* カード */
+  --radius-lg: 22px; /* モーダル */
+  --radius-full: 999px; /* ボタン、カテゴリ */
+
+  /* ── 動き ────────────────────────────────
+   * 演出は控えめにする（仕様書 7 章）。速すぎず、目立ちすぎず。 */
+  --ease: cubic-bezier(0.32, 0.72, 0.35, 1);
+  --duration-fast: 140ms;
+  --duration-normal: 260ms;
+  --duration-slow: 620ms; /* 葉が揺れる、水滴が落ちる */
+  --duration-levelup: 1200ms; /* レベルアップ時だけ長く取る */
+}
+
+/* 動きを減らす設定を尊重する。成長演出も止める。 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-levelup: 0ms;
+  }
+}

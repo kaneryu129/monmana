@@ -1,22 +1,92 @@
+@import './styles/tokens.css';
+
 /*
- * 暫定のベーススタイル。
- * デザイントークン（配色・余白・文字）は Issue #7 で styles/tokens.css に定義する。
- * ここに値を増やさないこと。
+ * 全画面共通の下地。
+ * 色・余白・文字サイズは必ず tokens.css の変数から取る。ここに値を直接書かない。
  */
 
-:root {
-  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
-  line-height: 1.85;
-  color: #2a312c;
-  background-color: #fbf9f3;
-  -webkit-font-smoothing: antialiased;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-* {
-  box-sizing: border-box;
+html {
+  /* iOS で本文が勝手に拡大されるのを防ぐ */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  /* ホーム画面から起動したときのセーフエリア（ADR-0007） */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  margin: 0;
+  text-wrap: balance;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* キーボード操作でどこにいるか分かるようにする */
+:focus-visible {
+  outline: 2px solid var(--c-green);
+  outline-offset: 2px;
+}
+
+/* 数字が縦に揃うようにする。学習時間やタイマーで効く */
+time,
+output,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 暫定の起動画面。#17 のルーティング実装で置き換える */
+.boot {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.boot__brand {
+  font-size: var(--text-lg);
+  letter-spacing: var(--tracking-wider);
+  color: var(--c-green);
+}
+
+.boot__tagline {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  color: var(--c-ink-soft);
+}
+
+.boot__note {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--c-ink-faint);
+  letter-spacing: var(--tracking-wide);
 }
