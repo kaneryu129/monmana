@@ -68,3 +68,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0007](0007-verification-strategy.md) | 動作確認は Chrome (macOS) と iPhone の 2 環境で行う | Accepted |
 | [0008](0008-plant-art-style.md) | モンステラの画風は手描き風とする | Accepted |
 | [0009](0009-linter-oxlint.md) | リンタは oxlint を使う | Accepted |
+| [0010](0010-spa-routing-on-pages.md) | SPA の直リンク対策は 404.html フォールバックとする | Accepted |
