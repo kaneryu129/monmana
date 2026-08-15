@@ -1,0 +1,416 @@
+<!-- @dsCard group="Screens" -->
+<title>モンまな 画面モックアップ</title>
+<style>
+  :root{
+  --paper:#FBF9F3; --paper-2:#F4F0E6; --edge:#E7E0D0;
+  --ink:#2A312C; --ink-2:#6B746D; --ink-3:#9AA298;
+  --green:#2C5340; --green-2:#3F7355; --green-pale:#E4EDE5;
+  --white:#FFFFFF;
+  --r:14px;
+  --fd:"Hiragino Mincho ProN","Yu Mincho",serif;
+  --fb:"Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+
+    --bg:#EFEDE5; --tx:#262F29; --tx2:#66706A; --tx3:#97A099; --rule:#DCD7C9; --ac:#2C5340;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#151815; --tx:#E7EAE3; --tx2:#A0A89E; --tx3:#737B72; --rule:#2E332C; --ac:#93BC9E;}}
+  :root[data-theme="dark"]{
+    --bg:#151815; --tx:#E7EAE3; --tx2:#A0A89E; --tx3:#737B72; --rule:#2E332C; --ac:#93BC9E;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--fb);
+    font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:82rem;margin:0 auto;padding:clamp(2.5rem,6vw,4.5rem) clamp(1.25rem,4vw,3rem) 6rem;
+    display:flex;flex-direction:column;gap:clamp(2.5rem,5vw,4rem)}
+  .eyebrow{font-size:13px;letter-spacing:.22em;color:var(--tx3);margin:0}
+  h1{font-family:var(--fd);font-size:clamp(1.9rem,4vw,2.2rem);font-weight:500;
+    line-height:1.4;letter-spacing:.02em;margin:.5rem 0 0;text-wrap:balance}
+  .lead{max-width:38em;margin:1rem 0 0;color:var(--tx2)}
+  .flowbox{border-top:1px solid var(--rule);padding-top:2rem;display:flex;flex-direction:column;gap:1rem}
+  h2{font-family:var(--fd);font-size:1.3rem;font-weight:500;letter-spacing:.03em;margin:0}
+  .grid{display:flex;flex-wrap:wrap;gap:clamp(1.5rem,3vw,2.5rem);justify-content:center}
+  .cell{display:flex;flex-direction:column;gap:.85rem;max-width:375px}
+  .cap__h{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
+  .cap__n{font-family:var(--fd);font-size:1.15rem;letter-spacing:.03em}
+  .cap__s{font-size:12px;color:var(--ac);letter-spacing:.08em}
+  .cap__d{font-size:13px;color:var(--tx2);margin:0}
+  pre.mermaid{background:transparent;text-align:center;overflow-x:auto}
+  .note{border-left:2px solid var(--ac);padding-left:1.1rem;max-width:42em;
+    display:flex;flex-direction:column;gap:.4rem}
+  .note p{margin:0;font-size:13px;color:var(--tx2)}
+  .closing{border-top:1px solid var(--rule);padding-top:2rem;display:flex;
+    flex-direction:column;gap:.9rem;max-width:44em}
+  .closing p{margin:0;color:var(--tx2)}
+  .closing ul{margin:0;padding-left:1.2em;color:var(--tx2);display:flex;flex-direction:column;gap:.35rem}
+
+  .scr{
+    position:relative; width:375px; height:812px; overflow:hidden;
+    background:var(--paper); color:var(--ink); font-family:var(--fb);
+    border-radius:32px; border:1px solid var(--edge); flex:none;
+    display:flex; flex-direction:column;
+  }
+  .bar{display:flex;justify-content:space-between;padding:14px 26px 2px;
+        font-size:12px;color:var(--ink-3);letter-spacing:.04em;flex:none}
+  .bar__r{letter-spacing:-2px}
+  .pad{padding:18px 26px 26px;display:flex;flex-direction:column;gap:14px;flex:1;min-height:0}
+  .pad--center{align-items:center;text-align:center;justify-content:center;gap:16px}
+
+  .brand{font-family:var(--fd);font-size:19px;letter-spacing:.14em;color:var(--green)}
+  .date{font-size:12px;color:var(--ink-3);letter-spacing:.08em;margin-top:-10px}
+  .greet{font-family:var(--fd);font-size:17px;line-height:1.85;margin:2px 0 0;color:var(--ink)}
+
+  .plantcard{background:var(--paper-2);border:1px solid var(--edge);border-radius:var(--r);
+    padding:14px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;
+    font:inherit;color:inherit;cursor:pointer;text-align:center;width:100%}
+  .plantcard__lv{font-size:12px;color:var(--green);letter-spacing:.06em}
+  .plantcard__go{font-size:11px;color:var(--ink-3)}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .stat{background:var(--white);border:1px solid var(--edge);border-radius:10px;
+    padding:9px 4px;text-align:center}
+  .stat__v{font-size:19px;color:var(--green);font-variant-numeric:tabular-nums;line-height:1.3}
+  .stat__u{font-size:10px;margin-left:1px;color:var(--ink-2)}
+  .stat__l{font-size:10px;color:var(--ink-3);letter-spacing:.1em;margin-top:1px}
+
+  .btn{width:100%;border-radius:999px;padding:15px;font:inherit;font-size:15px;
+    cursor:pointer;border:1px solid transparent;letter-spacing:.04em}
+  .btn--main{background:var(--green);color:var(--paper);border-color:var(--green)}
+  .btn--sub{background:transparent;color:var(--green);border-color:var(--edge)}
+  .btn--ghost{background:transparent;color:var(--ink-2);border-color:var(--edge);padding:13px}
+  .btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+  .recent{margin-top:2px;display:flex;flex-direction:column;gap:7px}
+  .recent__h{font-size:11px;color:var(--ink-3);letter-spacing:.14em}
+  .rec{display:flex;gap:10px;align-items:baseline;font-size:12px;
+    border-bottom:1px solid var(--edge);padding-bottom:6px}
+  .rec__t{color:var(--green);font-variant-numeric:tabular-nums}
+  .rec__c{color:var(--ink-2)}
+  .rec__d{margin-left:auto;color:var(--ink-3);font-size:11px}
+
+  .scr--quiet{background:var(--paper)}
+  .cats{display:flex;gap:7px;justify-content:center}
+  .cats--left{justify-content:flex-start}
+  .cat{font-size:12px;padding:5px 13px;border-radius:999px;border:1px solid var(--edge);color:var(--ink-3)}
+  .cat--on{background:var(--green-pale);border-color:var(--green-pale);color:var(--green)}
+  .clock{font-family:var(--fd);font-size:76px;letter-spacing:.03em;color:var(--green);
+    font-variant-numeric:tabular-nums;line-height:1.2;margin:14px 0 4px}
+  .cheer{font-family:var(--fd);font-size:14px;line-height:1.9;color:var(--ink-2);margin:0}
+  .timerbtns{display:flex;gap:10px;width:100%;margin-top:26px}
+  .soundlink{font-size:11px;color:var(--ink-3);letter-spacing:.08em;margin-top:6px}
+
+  .done__h{font-family:var(--fd);font-size:23px;font-weight:500;margin:0;color:var(--green)}
+  .done__s{font-family:var(--fd);font-size:14px;line-height:1.9;color:var(--ink-2);margin:0}
+  .pills{display:flex;gap:8px}
+  .pill{font-size:12px;color:var(--ink-2);background:var(--white);border:1px solid var(--edge);
+    border-radius:999px;padding:6px 14px}
+  .pill b{color:var(--green);font-weight:600}
+  .next{font-size:12px;color:var(--ink-2)}
+  .next b{color:var(--green);font-size:15px}
+  .memo{width:100%;border:1px dashed var(--edge);border-radius:10px;padding:12px;
+    font-size:12px;color:var(--ink-3);text-align:left;background:var(--white)}
+  .memo--sheet{color:var(--ink);border-style:solid}
+
+  .scr--celebrate{background:linear-gradient(180deg,#FFFDF7 0%,var(--paper) 46%)}
+  .spark{font-size:17px;color:#C7B27A;letter-spacing:.5em}
+  .lv__h{font-family:var(--fd);font-size:25px;font-weight:500;margin:0;color:var(--green)}
+  .lv__s{font-family:var(--fd);font-size:14px;line-height:1.9;margin:0;color:var(--ink)}
+  .lv__t{font-size:12px;line-height:1.9;color:var(--ink-2);margin:0}
+  .textlink{font-size:12px;color:var(--ink-3);letter-spacing:.06em;padding:4px}
+
+  .scr--view{background:radial-gradient(120% 62% at 50% 34%,#FFFEFA 0%,var(--paper) 58%,var(--paper-2) 100%)}
+  .bar--light{color:var(--ink-3)}
+  .back{padding:2px 26px 0;font-size:12px;color:var(--ink-2);letter-spacing:.06em;flex:none}
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 0}
+  .viewinfo{padding:0 26px 30px;display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center;flex:none}
+  .viewinfo__lv{font-size:12px;color:var(--green);letter-spacing:.14em}
+  .viewinfo__nm{font-family:var(--fd);font-size:19px;color:var(--ink)}
+  .viewinfo__row{display:flex;gap:18px;font-size:12px;color:var(--ink-2);margin-top:2px}
+  .viewinfo__row b{color:var(--green)}
+  .marks{margin-top:12px;display:flex;flex-direction:column;gap:6px;width:100%}
+  .mark{display:flex;gap:11px;font-size:11px;color:var(--ink-2);
+    border-top:1px solid var(--edge);padding-top:6px;text-align:left}
+  .mark__d{color:var(--ink-3);font-variant-numeric:tabular-nums;flex:none}
+
+  .scr--modal{background:var(--paper)}
+  .dim{position:absolute;inset:0;background:rgba(42,49,44,.30)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--paper);
+    border-radius:22px 22px 0 0;padding:12px 26px 26px;display:flex;flex-direction:column;
+    gap:10px;align-items:center;text-align:center}
+  .sheet__grip{width:36px;height:4px;border-radius:2px;background:var(--edge);margin-bottom:4px}
+  .sheet__h{font-family:var(--fd);font-size:18px;font-weight:500;margin:0 0 2px;color:var(--ink)}
+  .field{display:flex;justify-content:space-between;align-items:baseline;width:100%;
+    background:var(--white);border:1px solid var(--edge);border-radius:10px;padding:13px 15px}
+  .field__l{font-size:11px;color:var(--ink-3);letter-spacing:.1em;width:100%;text-align:left}
+  .field__i{font-size:23px;color:var(--green);font-variant-numeric:tabular-nums;flex:none}
+  .field__u{font-size:12px;color:var(--ink-2);margin-left:3px}
+  .drops{font-size:12px;color:var(--ink-2);margin-top:2px}
+  .drops b{color:var(--green);font-size:15px}
+
+.flat{
+    --lf-fill:#2F6B45; --lf-far:#1E4A31; --lf-near:#4C8B5E;
+    --lf-stroke:none; --lf-sw:0;
+    --stem-stroke:#1E4A31; --stem-sw:3.4;
+    --mid-stroke:#FBF9F3; --mid-sw:1.3; --mid-op:0.38;
+    --vein-op:0; --vein-stroke:none; --vein-sw:0;
+    --varie:#FFFFFF; --varie-op:1;
+    --pot:#5C4534; --pot-rim:#463527; --pot-band:#2E231A; --pot-stroke:none; --pot-sw:0;
+    --soil:#46372A; --soil-stroke:none;}
+.line{
+    --lf-fill:#FBF9F3; --lf-far:#FBF9F3; --lf-near:#FBF9F3;
+    --lf-stroke:#1E4A31; --lf-sw:2.4;
+    --stem-stroke:#1E4A31; --stem-sw:2.4;
+    --mid-stroke:#1E4A31; --mid-sw:1.6; --mid-op:1;
+    --vein-stroke:#6BA37C; --vein-sw:1.1; --vein-op:1;
+    --varie:none; --varie-op:0;
+    --pot:none; --pot-rim:none; --pot-band:#46372A; --pot-stroke:#46372A; --pot-sw:2.4;
+    --soil:none; --soil-stroke:#46372A;}
+.hand{
+    --lf-fill:#2F6B45; --lf-far:#1E4A31; --lf-near:#4C8B5E;
+    --lf-stroke:#1A3F2A; --lf-sw:1.2;
+    --stem-stroke:#1E4A31; --stem-sw:3.2;
+    --mid-stroke:#1A3F2A; --mid-sw:1.2; --mid-op:0.45;
+    --vein-stroke:#1A3F2A; --vein-sw:0.9; --vein-op:0.3;
+    --varie:#FFFFFF; --varie-op:0.96;
+    --pot:#5C4534; --pot-rim:#463527; --pot-band:#2E231A; --pot-stroke:#3A2C20; --pot-sw:1.2;
+    --soil:#46372A; --soil-stroke:none;}
+.ghost{opacity:.38;transform:translate(2px,2.4px)}
+svg.hand{height:auto;display:block}</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="cp" clipPathUnits="userSpaceOnUse" clip-rule="evenodd"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z"/></clipPath>
+<symbol id="stage-1" viewBox="0 0 240 268"><g transform="translate(120,196)">
+    <path d="M -46,0 L -40,40 Q -39,48 -31,48 L 31,48 Q 39,48 40,40 L 46,0 Z"
+          fill="var(--pot)" stroke="var(--pot-stroke)" stroke-width="var(--pot-sw)" stroke-linejoin="round"/>
+    <path d="M -50,-12 L 50,-12 L 46,0 L -46,0 Z"
+          fill="var(--pot-rim)" stroke="var(--pot-stroke)" stroke-width="var(--pot-sw)" stroke-linejoin="round"/>
+    <path d="M -42,14 L 42,14 M -40,30 L 40,30"
+          fill="none" stroke="var(--pot-band)" stroke-width="1.5" opacity="0.5"/>
+    <ellipse cx="0" cy="-7" rx="43" ry="7" fill="var(--soil)"
+             stroke="var(--soil-stroke)" stroke-width="var(--pot-sw)"/>
+  <path d="M 0,-9 C -1,-15 0,-20 1,-25" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <g transform="translate(1,-25) rotate(-5) scale(0.62)"><path d="M 0,-4 C -6,-16 -7,-32 -3,-46 C -1,-52 1,-56 2,-59 C 6,-52 9,-34 8,-22 C 7,-12 3,-7 0,-4 Z" fill="var(--lf-fill)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/></g>
+</g></symbol>
+<symbol id="stage-5" viewBox="0 0 240 268"><g transform="translate(120,196)">
+    <path d="M -46,0 L -40,40 Q -39,48 -31,48 L 31,48 Q 39,48 40,40 L 46,0 Z"
+          fill="var(--pot)" stroke="var(--pot-stroke)" stroke-width="var(--pot-sw)" stroke-linejoin="round"/>
+    <path d="M -50,-12 L 50,-12 L 46,0 L -46,0 Z"
+          fill="var(--pot-rim)" stroke="var(--pot-stroke)" stroke-width="var(--pot-sw)" stroke-linejoin="round"/>
+    <path d="M -42,14 L 42,14 M -40,30 L 40,30"
+          fill="none" stroke="var(--pot-band)" stroke-width="1.5" opacity="0.5"/>
+    <ellipse cx="0" cy="-7" rx="43" ry="7" fill="var(--soil)"
+             stroke="var(--soil-stroke)" stroke-width="var(--pot-sw)"/>
+  <path d="M 0,-9 C -10,-24 -24,-36 -38,-46" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-9 C 10,-26 26,-38 40,-50" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-9 C -5,-32 -11,-52 -16,-68" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-9 C 4,-34 8,-56 11,-74" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <g transform="translate(-40,-48) rotate(-60) scale(0.52)"><path d="M 0.0,-9.4 L -18.2,-8.4 L -28.9,-14.7 L -38.9,-21.0 L -46.4,-27.3 L -49.8,-33.6 L -49.4,-39.9 L -47.2,-46.2 L -45.0,-52.5 L -43.0,-58.8 L -40.8,-65.1 L -37.9,-71.4 L -33.9,-77.7 L -28.9,-84.0 L -22.7,-90.4 L -14.9,-96.7 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 14.9,-96.7 L 22.7,-90.4 L 28.9,-84.0 L 33.9,-77.7 L 37.9,-71.4 L 40.8,-65.1 L 43.0,-58.8 L 45.0,-52.5 L 47.2,-46.2 L 49.4,-39.9 L 49.8,-33.6 L 46.4,-27.3 L 38.9,-21.0 L 28.9,-14.7 L 18.2,-8.4 Z" fill="var(--lf-far)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(42,-52) rotate(58) scale(0.54)"><path d="M 0.0,-9.4 L -18.2,-8.4 L -28.9,-14.7 L -38.9,-21.0 L -46.4,-27.3 L -49.8,-33.6 L -49.4,-39.9 L -47.2,-46.2 L -45.0,-52.5 L -43.0,-58.8 L -40.8,-65.1 L -37.9,-71.4 L -33.9,-77.7 L -28.9,-84.0 L -22.7,-90.4 L -14.9,-96.7 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 14.9,-96.7 L 22.7,-90.4 L 28.9,-84.0 L 33.9,-77.7 L 37.9,-71.4 L 40.8,-65.1 L 43.0,-58.8 L 45.0,-52.5 L 47.2,-46.2 L 49.4,-39.9 L 49.8,-33.6 L 46.4,-27.3 L 38.9,-21.0 L 28.9,-14.7 L 18.2,-8.4 Z" fill="var(--lf-far)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(-17,-70) rotate(-24) scale(0.6)"><path d="M 0.0,-9.4 L -18.2,-8.4 L -28.9,-14.7 L -38.9,-21.0 L -46.4,-27.3 L -49.8,-33.6 L -49.4,-39.9 L -47.2,-46.2 L -45.0,-52.5 L -43.0,-58.8 L -40.8,-65.1 L -37.9,-71.4 L -33.9,-77.7 L -28.9,-84.0 L -22.7,-90.4 L -14.9,-96.7 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 14.9,-96.7 L 22.7,-90.4 L 28.9,-84.0 L 33.9,-77.7 L 37.9,-71.4 L 40.8,-65.1 L 43.0,-58.8 L 45.0,-52.5 L 47.2,-46.2 L 49.4,-39.9 L 49.8,-33.6 L 46.4,-27.3 L 38.9,-21.0 L 28.9,-14.7 L 18.2,-8.4 Z" fill="var(--lf-fill)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(12,-76) rotate(16) scale(0.64)"><path d="M 0.0,-9.4 L -18.2,-8.4 L -28.9,-14.7 L -38.9,-21.0 L -46.4,-27.3 L -49.8,-33.6 L -49.4,-39.9 L -47.2,-46.2 L -45.0,-52.5 L -43.0,-58.8 L -40.8,-65.1 L -37.9,-71.4 L -33.9,-77.7 L -28.9,-84.0 L -22.7,-90.4 L -14.9,-96.7 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 14.9,-96.7 L 22.7,-90.4 L 28.9,-84.0 L 33.9,-77.7 L 37.9,-71.4 L 40.8,-65.1 L 43.0,-58.8 L 45.0,-52.5 L 47.2,-46.2 L 49.4,-39.9 L 49.8,-33.6 L 46.4,-27.3 L 38.9,-21.0 L 28.9,-14.7 L 18.2,-8.4 Z" fill="var(--lf-near)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+</g></symbol>
+<symbol id="stage-10" viewBox="0 0 240 268"><g transform="translate(120,202)">
+    <path d="M -48,0 L -42,40 Q -41,48 -33,48 L 33,48 Q 41,48 42,40 L 48,0 Z"
+          fill="var(--pot)" stroke="var(--pot-stroke)" stroke-width="var(--pot-sw)" stroke-linejoin="round"/>
+    <path d="M -52,-12 L 52,-12 L 48,0 L -48,0 Z"
+          fill="var(--pot-rim)" stroke="var(--pot-stroke)" stroke-width="var(--pot-sw)" stroke-linejoin="round"/>
+    <path d="M -44,14 L 44,14 M -42,30 L 42,30"
+          fill="none" stroke="var(--pot-band)" stroke-width="1.5" opacity="0.5"/>
+    <ellipse cx="0" cy="-7" rx="45" ry="7" fill="var(--soil)"
+             stroke="var(--soil-stroke)" stroke-width="var(--pot-sw)"/>
+  <path d="M 0,-10 C -16,-26 -36,-38 -54,-46" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-10 C 16,-28 36,-40 54,-50" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-10 C -10,-36 -24,-58 -34,-74" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-10 C 10,-38 22,-62 32,-80" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-10 C -3,-44 -6,-72 -8,-94" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <path d="M 0,-10 C 5,-42 10,-68 14,-90" fill="none" stroke="var(--stem-stroke)" stroke-width="var(--stem-sw)" stroke-linecap="round"/>
+  <g transform="translate(-56,-48) rotate(-74) scale(0.46)"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z" fill="var(--lf-far)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(56,-52) rotate(72) scale(0.48)"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z" fill="var(--lf-far)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(-36,-76) rotate(-44) scale(0.58)"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z" fill="var(--lf-fill)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><g clip-path="url(#cp)"><path d="M 3,-116 L 3,-28 C -10,-22 -28,-30 -42,-46 C -52,-64 -46,-88 -28,-104            C -18,-113 -8,-117 3,-116 Z" fill="var(--varie)" opacity="var(--varie-op)"/></g><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(34,-82) rotate(42) scale(0.6)"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z" fill="var(--lf-fill)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(-9,-98) rotate(-14) scale(0.68)"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z" fill="var(--lf-near)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+  <g transform="translate(15,-94) rotate(18) scale(0.66)"><path d="M 0.0,-9.4 L -9.3,-3.4 L -11.9,-4.8 L -14.3,-6.1 L -16.6,-7.4 L -18.9,-8.8 L -21.2,-10.1 L -23.4,-11.5 L -25.7,-12.8 L -27.9,-14.1 L -30.2,-15.5 L -32.4,-16.8 L -34.5,-18.1 L -36.6,-19.5 L -38.6,-20.8 L -40.5,-22.2 L -42.3,-23.5 L -10.5,-25.2 L -49.1,-31.3 L -49.4,-32.0 L -49.6,-32.8 L -49.8,-33.5 L -49.9,-34.2 L -50.0,-34.9 L -50.0,-35.7 L -50.0,-36.4 L -49.9,-37.1 L -49.8,-37.9 L -49.7,-38.6 L -49.5,-39.3 L -49.3,-40.0 L -49.1,-40.8 L -48.9,-41.5 L -48.7,-42.2 L -10.5,-43.9 L -45.8,-50.0 L -45.6,-50.8 L -45.3,-51.5 L -45.1,-52.2 L -44.9,-52.9 L -44.6,-53.7 L -44.4,-54.4 L -44.2,-55.1 L -43.9,-55.8 L -43.7,-56.6 L -43.5,-57.3 L -43.3,-58.0 L -43.0,-58.8 L -42.8,-59.5 L -42.6,-60.2 L -42.3,-60.9 L -10.5,-62.6 L -39.3,-68.7 L -38.9,-69.3 L -38.6,-70.0 L -38.3,-70.7 L -37.9,-71.3 L -37.6,-72.0 L -37.2,-72.7 L -36.8,-73.3 L -36.4,-74.0 L -36.0,-74.6 L -35.6,-75.3 L -35.2,-76.0 L -34.7,-76.6 L -34.3,-77.3 L -33.8,-78.0 L -33.3,-78.6 L -10.5,-80.3 L -26.4,-86.8 L -25.3,-87.9 L -24.2,-88.9 L -23.1,-90.0 L -21.9,-91.1 L -20.6,-92.2 L -19.3,-93.2 L -18.0,-94.3 L -16.6,-95.4 L -15.1,-96.5 L -13.6,-97.6 L -12.0,-98.6 L -10.2,-99.7 L -8.4,-100.8 L -6.3,-101.9 L -3.8,-103.0 L 0.0,-104.0 L 3.8,-103.0 L 6.3,-101.9 L 8.4,-100.8 L 10.2,-99.7 L 12.0,-98.6 L 13.6,-97.6 L 15.1,-96.5 L 16.6,-95.4 L 18.0,-94.3 L 19.3,-93.2 L 20.6,-92.2 L 21.9,-91.1 L 23.1,-90.0 L 24.2,-88.9 L 25.3,-87.9 L 26.4,-86.8 L 10.5,-80.3 L 33.3,-78.6 L 33.8,-78.0 L 34.3,-77.3 L 34.7,-76.6 L 35.2,-76.0 L 35.6,-75.3 L 36.0,-74.6 L 36.4,-74.0 L 36.8,-73.3 L 37.2,-72.7 L 37.6,-72.0 L 37.9,-71.3 L 38.3,-70.7 L 38.6,-70.0 L 38.9,-69.3 L 39.3,-68.7 L 10.5,-62.6 L 42.3,-60.9 L 42.6,-60.2 L 42.8,-59.5 L 43.0,-58.8 L 43.3,-58.0 L 43.5,-57.3 L 43.7,-56.6 L 43.9,-55.8 L 44.2,-55.1 L 44.4,-54.4 L 44.6,-53.7 L 44.9,-52.9 L 45.1,-52.2 L 45.3,-51.5 L 45.6,-50.8 L 45.8,-50.0 L 10.5,-43.9 L 48.7,-42.2 L 48.9,-41.5 L 49.1,-40.8 L 49.3,-40.0 L 49.5,-39.3 L 49.7,-38.6 L 49.8,-37.9 L 49.9,-37.1 L 50.0,-36.4 L 50.0,-35.7 L 50.0,-34.9 L 49.9,-34.2 L 49.8,-33.5 L 49.6,-32.8 L 49.4,-32.0 L 49.1,-31.3 L 10.5,-25.2 L 42.3,-23.5 L 40.5,-22.2 L 38.6,-20.8 L 36.6,-19.5 L 34.5,-18.1 L 32.4,-16.8 L 30.2,-15.5 L 27.9,-14.1 L 25.7,-12.8 L 23.4,-11.5 L 21.2,-10.1 L 18.9,-8.8 L 16.6,-7.4 L 14.3,-6.1 L 11.9,-4.8 L 9.3,-3.4 Z M -7.6,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M 2.4,-35.4 a 2.6,5.0 0 1,0 5.2,0 a 2.6,5.0 0 1,0 -5.2,0 Z M -7.0,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z M 2.2,-55.1 a 2.4,4.6 0 1,0 4.8,0 a 2.4,4.6 0 1,0 -4.8,0 Z" fill="var(--lf-near)" stroke="var(--lf-stroke)" stroke-width="var(--lf-sw)" stroke-linejoin="round" fill-rule="evenodd"/><g clip-path="url(#cp)"><path d="M -3,-116 L -3,-44 C 12,-38 32,-46 48,-62 C 56,-80 48,-100 30,-110            C 18,-116 6,-118 -3,-116 Z" fill="var(--varie)" opacity="var(--varie-op)"/></g><path d="M 0,-8 L 0,-96" fill="none" stroke="var(--mid-stroke)" stroke-width="var(--mid-sw)" stroke-linecap="round" opacity="var(--mid-op)"/><path d="M 0,-26 L -20,-34 M 0,-26 L 20,-34 M 0,-50 L -18,-60 M 0,-50 L 18,-60 M 0,-72 L -13,-82 M 0,-72 L 13,-82" fill="none" stroke="var(--vein-stroke)" stroke-width="var(--vein-sw)" stroke-linecap="round" opacity="var(--vein-op)"/></g>
+</g></symbol>
+</defs></svg>
+<div class="wrap">
+<header>
+  <p class="eyebrow">モンまな ／ 画面設計</p>
+  <h1>6 画面のモックアップ</h1>
+  <p class="lead">仕様書 3〜9 章の画面を iPhone の寸法（375×812）で組みました。
+  モンステラは ADR-0008 で決めた手描き風です。実装はこの見た目を参照します。</p>
+  <div class="note">
+    <p><b>寸法を iPhone に合わせた理由。</b>ADR-0007 で iPhone を実利用の主環境と定めたため、
+    最も制約の厳しい画面幅で成立することを先に確かめています。</p>
+    <p><b>文言は仕様書 13 章に従いました。</b>ユーザーを責める表現は使っていません。
+    休んだ後でも「おかえり」で迎えます。</p>
+  </div>
+</header>
+
+<section class="flowbox">
+  <h2>画面遷移</h2>
+  <pre class="mermaid">flowchart TD
+  H["ホーム"] -->|"25分、勉強を始める"| T["タイマー"]
+  T -->|"25分完了 / 途中で終了"| C["完了・成長演出"]
+  C -->|"もう25分続ける"| T
+  C -->|"ホームへ戻る"| H
+  H -->|"時間だけ記録する"| R["手動記録モーダル"]
+  R -->|"保存"| C
+  H -->|"モンステラを見る"| P["植物ビュー"]
+  C -->|"モンステラを見る"| P
+  P -->|"戻る"| H</pre>
+</section>
+
+<section class="flowbox"><h2>各画面</h2><div class="grid">
+<div class="cell">
+  <div class="cap__h"><span class="cap__n">ホーム</span><span class="cap__s">仕様書 5 章</span></div>
+  <p class="cap__d">迷わず勉強を始められること。</p>
+  
+<div class="scr">
+  <div class="bar"><span>9:41</span><span class="bar__r">▮▮▮</span></div>
+  <div class="pad">
+    <div class="brand">モンまな</div>
+    <div class="date">8月15日（金）</div>
+    <p class="greet">おかえり。<br>今日も一枚、葉を育てよう。</p>
+
+    <button class="plantcard" type="button">
+      <svg class="hand" viewBox="0 0 240 268" width="132" style="opacity:1.0" aria-hidden="true"><use href="#stage-5" class="ghost"/><use href="#stage-5"/></svg>
+      <div class="plantcard__lv">成長 Lv.4 ／ 若葉のモンステラ</div>
+      <div class="plantcard__go">モンステラを見る →</div>
+    </button>
+
+    <div class="stats">
+      <div class="stat"><div class="stat__v">50<span class="stat__u">分</span></div><div class="stat__l">今日</div></div>
+      <div class="stat"><div class="stat__v">7<span class="stat__u">日</span></div><div class="stat__l">連続</div></div>
+      <div class="stat"><div class="stat__v">12<span class="stat__u">時間30分</span></div><div class="stat__l">累計</div></div>
+    </div>
+
+    <button class="btn btn--main" type="button">25分、勉強を始める</button>
+    <button class="btn btn--sub" type="button">時間だけ記録する</button>
+
+    <div class="recent">
+      <div class="recent__h">直近の記録</div>
+      <div class="rec"><span class="rec__t">25分</span><span class="rec__c">英語</span><span class="rec__d">今日 14:20</span></div>
+      <div class="rec"><span class="rec__t">25分</span><span class="rec__c">資格</span><span class="rec__d">今日 10:05</span></div>
+      <div class="rec"><span class="rec__t">50分</span><span class="rec__c">英語</span><span class="rec__d">昨日</span></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="cell">
+  <div class="cap__h"><span class="cap__n">タイマー</span><span class="cap__s">仕様書 6 章</span></div>
+  <p class="cap__d">勉強中を邪魔しないこと。要素を最小限にした。</p>
+  
+<div class="scr scr--quiet">
+  <div class="bar"><span>9:41</span><span class="bar__r">▮▮▮</span></div>
+  <div class="pad pad--center">
+    <div class="cats">
+      <span class="cat">英語</span><span class="cat cat--on">資格</span><span class="cat">その他</span>
+    </div>
+    <div class="clock">24:13</div>
+    <p class="cheer">今日の一歩が、<br>葉を育てています。</p>
+    <div class="timerbtns">
+      <button class="btn btn--ghost" type="button">一時停止</button>
+      <button class="btn btn--ghost" type="button">終了する</button>
+    </div>
+    <div class="soundlink">音の設定</div>
+  </div>
+</div>
+</div>
+<div class="cell">
+  <div class="cap__h"><span class="cap__n">完了・成長演出</span><span class="cap__s">仕様書 7 章</span></div>
+  <p class="cap__d">通常回。控えめに、短く。</p>
+  
+<div class="scr">
+  <div class="bar"><span>9:41</span><span class="bar__r">▮▮▮</span></div>
+  <div class="pad pad--center">
+    <h2 class="done__h">おつかれさま！</h2>
+    <p class="done__s">25分の学びで、<br>モンステラに水が届きました。</p>
+    <svg class="hand" viewBox="0 0 240 268" width="168" style="opacity:1.0" aria-hidden="true"><use href="#stage-5" class="ghost"/><use href="#stage-5"/></svg>
+    <div class="pills">
+      <span class="pill">今回 <b>25分</b></span>
+      <span class="pill">今日 <b>75分</b></span>
+    </div>
+    <div class="next">次のレベルまで あと <b>2</b> しずく</div>
+    <div class="memo">ひとこと（任意）</div>
+    <button class="btn btn--main" type="button">もう25分続ける</button>
+    <button class="btn btn--sub" type="button">ホームへ戻る</button>
+  </div>
+</div>
+</div>
+<div class="cell">
+  <div class="cap__h"><span class="cap__n">レベルアップ時</span><span class="cap__s">仕様書 7 章 / 10 章</span></div>
+  <p class="cap__d">ここだけ明確に演出する。</p>
+  
+<div class="scr scr--celebrate">
+  <div class="bar"><span>9:41</span><span class="bar__r">▮▮▮</span></div>
+  <div class="pad pad--center">
+    <div class="spark">✳</div>
+    <h2 class="lv__h">Lv.10 になりました！</h2>
+    <p class="lv__s">あなたのモンステラに、<br>はじめての白い斑が現れました。</p>
+    <svg class="hand" viewBox="0 0 240 268" width="196" style="opacity:1.0" aria-hidden="true"><use href="#stage-10" class="ghost"/><use href="#stage-10"/></svg>
+    <p class="lv__t">25分ずつ積み重ねた学びが、<br>特別な一枚になりました。</p>
+    <button class="btn btn--main" type="button">モンステラを見る</button>
+    <button class="btn btn--sub" type="button">続けて勉強する</button>
+    <div class="textlink">ホームへ戻る</div>
+  </div>
+</div>
+</div>
+<div class="cell">
+  <div class="cap__h"><span class="cap__n">植物ビュー</span><span class="cap__s">仕様書 8 章</span></div>
+  <p class="cap__d">積み重ねを眺めて実感する。</p>
+  
+<div class="scr scr--view">
+  <div class="bar bar--light"><span>9:41</span><span class="bar__r">▮▮▮</span></div>
+  <div class="back">← 戻る</div>
+  <div class="stage"><svg class="hand" viewBox="0 0 240 268" width="300" style="opacity:1.0" aria-hidden="true"><use href="#stage-10" class="ghost"/><use href="#stage-10"/></svg></div>
+  <div class="viewinfo">
+    <div class="viewinfo__lv">成長 Lv.10</div>
+    <div class="viewinfo__nm">斑入りモンステラ</div>
+    <div class="viewinfo__row">
+      <span>累計 <b>18時間45分</b></span><span>育てた葉 <b>6枚</b></span>
+    </div>
+    <div class="marks">
+      <div class="mark"><span class="mark__d">2026.08.15</span>はじめての斑入りの葉</div>
+      <div class="mark"><span class="mark__d">2026.08.15</span>Lv.10 達成</div>
+      <div class="mark"><span class="mark__d">2026.08.09</span>7日つづけて葉を育てた</div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="cell">
+  <div class="cap__h"><span class="cap__n">手動記録モーダル</span><span class="cap__s">仕様書 9 章</span></div>
+  <p class="cap__d">タイマーを使えない時の記録。</p>
+  
+<div class="scr scr--modal">
+  <div class="bar"><span>9:41</span><span class="bar__r">▮▮▮</span></div>
+  <div class="dim"></div>
+  <div class="sheet">
+    <div class="sheet__grip"></div>
+    <h2 class="sheet__h">時間だけ記録する</h2>
+    <label class="field"><span class="field__l">学習時間</span>
+      <span class="field__i">60<span class="field__u">分</span></span></label>
+    <div class="field__l">カテゴリ（任意）</div>
+    <div class="cats cats--left">
+      <span class="cat cat--on">英語</span><span class="cat">資格</span><span class="cat">その他</span>
+    </div>
+    <div class="field__l">ひとこと（任意）</div>
+    <div class="memo memo--sheet">英単語を50個復習した</div>
+    <div class="drops">この記録で <b>2</b> しずく たまります</div>
+    <button class="btn btn--main" type="button">記録する</button>
+    <div class="textlink">とじる</div>
+  </div>
+</div>
+</div>
+</div></section>
+
+<section class="closing">
+  <h2>設計上の判断</h2>
+  <ul>
+    <li><b>タイマー画面だけ要素を削りました。</b>仕様書 6 章の「集中を妨げない」に従い、
+    履歴も統計も出しません。残り時間・応援・停止・終了だけです。</li>
+    <li><b>演出の強さに差をつけました。</b>通常の完了は控えめ、レベルアップ時だけ
+    背景に光を入れ、モンステラを大きく出します（仕様書 7 章）。</li>
+    <li><b>植物ビューは余白を最大にしました。</b>統計を下部にまとめ、
+    上半分はモンステラと光だけにしています（仕様書 8 章）。</li>
+    <li><b>手動記録は、たまるしずくを保存前に見せます。</b>
+    「この記録で 2 しずく たまります」と示すことで、25 分単位の仕組みが自然に伝わります。</li>
+  </ul>
+  <p>ここで決まった配色・余白・文字サイズは、そのまま Issue #7（デザイントークン）の入力になります。</p>
+  <p>直したいところがあれば指摘してください。生成スクリプトは <code>design/screens/src/</code> にあります。</p>
+</section>
+</div>
