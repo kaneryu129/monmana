@@ -352,6 +352,13 @@ output,
   color: var(--c-green);
 }
 
+/* シート内では左寄せにする。
+   親が align-items: center のため、幅を持たせないと justify-content が効かない */
+.cats--left {
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .clock {
   font-family: var(--font-display);
   font-size: var(--text-clock);
@@ -535,4 +542,112 @@ output,
   gap: var(--space-3);
   width: 100%;
   margin-top: var(--space-2);
+}
+
+/* ── 手動記録シート（仕様書 9 章） ───────────*/
+
+.sheet {
+  border: 0;
+  padding: var(--space-3) var(--space-6) var(--space-6);
+  margin: auto auto 0;
+  width: 100%;
+  max-width: 30rem;
+  background: var(--c-paper);
+  color: var(--c-ink);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  text-align: center;
+}
+
+.sheet::backdrop {
+  background: rgba(42, 49, 44, 0.3);
+}
+
+.sheet__grip {
+  width: 2.25rem;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--c-edge);
+}
+
+.sheet__title {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  background: var(--c-surface);
+  border: 1px solid var(--c-edge);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+}
+
+.field__label {
+  font-size: var(--text-xs);
+  color: var(--c-ink-faint);
+  letter-spacing: var(--tracking-wider);
+}
+
+.field__label--block {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field__input {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.field__input input {
+  width: 4.5rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-xl);
+  color: var(--c-green);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.field__unit {
+  font-size: var(--text-sm);
+  color: var(--c-ink-soft);
+}
+
+.field__hint {
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  font-size: var(--text-xs);
+  color: var(--c-ink-soft);
+}
+
+.sheet__drops {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--c-ink-soft);
+}
+
+.sheet__drops b {
+  color: var(--c-green);
+  font-size: var(--text-md);
+}
+
+.sheet__close {
+  background: transparent;
+  border: 0;
+  font-size: var(--text-sm);
+  color: var(--c-ink-faint);
+  padding: var(--space-2);
 }
