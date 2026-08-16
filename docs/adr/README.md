@@ -72,3 +72,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0011](0011-light-theme-only.md) | アプリはライトテーマ固定とする | Accepted |
 | [0012](0012-day-boundary-at-4am.md) | 一日の境界を午前 4 時とする | Accepted |
 | [0013](0013-completion-sound.md) | 終了音は Web Audio API で合成する | Accepted |
+| [0014](0014-pwa-offline-strategy.md) | PWA は全アセットを事前キャッシュし、自動更新する | Accepted |

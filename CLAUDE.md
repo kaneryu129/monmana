@@ -36,6 +36,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | テーマ | ライト固定。ダークテーマを持たない | [0011](docs/adr/0011-light-theme-only.md) |
 | 一日の境界 | 午前 4 時。深夜の学習は前日ぶん | [0012](docs/adr/0012-day-boundary-at-4am.md) |
 | 終了音 | Web Audio で合成。音声ファイルを持たない | [0013](docs/adr/0013-completion-sound.md) |
+| PWA | 全アセットを事前キャッシュ。更新は自動 | [0014](docs/adr/0014-pwa-offline-strategy.md) |
 
 ### 対応環境と確認方針
 
