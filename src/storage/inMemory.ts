@@ -19,6 +19,12 @@ export class InMemoryRepository implements Repository {
     return Promise.resolve()
   }
 
+  updateSession(session: StudySession): Promise<void> {
+    const i = this.sessions.findIndex((s) => s.id === session.id)
+    if (i >= 0) this.sessions[i] = session
+    return Promise.resolve()
+  }
+
   getSessions(query: SessionQuery = {}): Promise<StudySession[]> {
     let result = this.sessions.filter((s) => {
       if (query.from !== undefined && s.dateKey < query.from) return false

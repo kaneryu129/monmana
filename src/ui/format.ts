@@ -53,3 +53,18 @@ export function recordWhen(startedAt: number, dateKey: DateKey, today: DateKey):
   if (daysBetween(dateKey, today) === 1) return '昨日'
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
+
+/**
+ * 完了画面の本文。仕様書 7 章、13 章。
+ *
+ * **しずくが付いていないのに「水が届きました」と書かない。**
+ * 途中終了ではしずくが付かない（仕様書 10 章）ため、
+ * 祝いすぎると事実と食い違う。
+ *
+ * かといって責めない。「途中でやめました」のような書き方はしない。
+ */
+export function completionMessage(minutes: number, drops: number): string {
+  if (drops > 0) return `${minutes}分の学びで、\nモンステラに水が届きました。`
+  if (minutes > 0) return `ここまでの${minutes}分を、\n記録しました。`
+  return 'またいつでも、\n続きから始められます。'
+}
