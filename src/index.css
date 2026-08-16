@@ -651,3 +651,106 @@ output,
   color: var(--c-ink-faint);
   padding: var(--space-2);
 }
+
+/* ── 植物ビュー（仕様書 8 章） ───────────────
+   ホーム画面より大きく、余白を多く。鑑賞に集中できる画面にする */
+
+.plantview {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  /* 成長に応じて光が差すように、中央から明るくする */
+  background: radial-gradient(
+    120% 62% at 50% 34%,
+    #fffefa 0%,
+    var(--c-paper) 58%,
+    var(--c-paper-sunk) 100%
+  );
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+.plantview__back {
+  flex: none;
+  padding: var(--space-5) var(--space-6) 0;
+  font-size: var(--text-sm);
+  color: var(--c-ink-soft);
+  letter-spacing: var(--tracking-wide);
+  text-decoration: none;
+}
+
+/* 上半分。モンステラと光だけを置く */
+.plantview__stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: var(--space-4) 0;
+}
+
+.plantview__figure {
+  width: 18.75rem;
+  max-width: 80%;
+  aspect-ratio: 1;
+}
+
+.plantview__info {
+  flex: none;
+  padding: 0 var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.plantview__level {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--c-green);
+  letter-spacing: var(--tracking-wider);
+}
+
+.plantview__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.plantview__numbers {
+  display: flex;
+  gap: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--c-ink-soft);
+  margin-top: var(--space-1);
+}
+
+.plantview__numbers b {
+  color: var(--c-green);
+}
+
+.marks {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mark {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--c-ink-soft);
+  border-top: 1px solid var(--c-edge);
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
+  text-align: left;
+}
+
+.mark__date {
+  flex: none;
+  color: var(--c-ink-faint);
+}
