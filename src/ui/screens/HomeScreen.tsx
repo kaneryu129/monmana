@@ -6,6 +6,7 @@
  *
  * モンステラの描画は #32 以降。ここでは置き場所だけ確保する。
  */
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toDateKey } from '../../domain/dateKey'
 import { levelFromDrops } from '../../domain/level'
@@ -13,6 +14,7 @@ import { stageName } from '../../domain/stage'
 import { recentSessions } from '../../domain/stats'
 import { useAppState } from '../AppState'
 import Button from '../components/Button'
+import ManualRecordSheet from '../components/ManualRecordSheet'
 import StatTile from '../components/StatTile'
 import StorageNotice from '../components/StorageNotice'
 import { categoryLabels, durationParts, formatDate, greeting, recordWhen } from '../format'
@@ -22,6 +24,7 @@ import { unlock } from '../sound'
 export default function HomeScreen() {
   const { stats, growth, sessions } = useAppState()
   const navigate = useNavigate()
+  const [manualOpen, setManualOpen] = useState(false)
 
   const now = Date.now()
   const today = toDateKey(now)
@@ -66,7 +69,7 @@ export default function HomeScreen() {
         >
           25分、勉強を始める
         </Button>
-        <Button variant="sub" disabled>
+        <Button variant="sub" onClick={() => setManualOpen(true)}>
           時間だけ記録する
         </Button>
       </div>
@@ -91,6 +94,8 @@ export default function HomeScreen() {
       )}
 
       <StorageNotice />
+
+      <ManualRecordSheet open={manualOpen} onClose={() => setManualOpen(false)} />
     </main>
   )
 }
