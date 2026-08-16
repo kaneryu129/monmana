@@ -15,6 +15,7 @@ import { useAppState } from '../AppState'
 import Button from '../components/Button'
 import { categoryLabels } from '../format'
 import { paths } from '../paths'
+import { isSoundEnabled, notifyComplete, setSoundEnabled } from '../sound'
 import { useTimer } from '../useTimer'
 
 const categories: Category[] = ['english', 'certification', 'other']
@@ -24,6 +25,7 @@ export default function TimerScreen() {
   const navigate = useNavigate()
   const [category, setCategory] = useState<Category>()
   const [saving, setSaving] = useState(false)
+  const [soundOn, setSoundOn] = useState(() => isSoundEnabled())
 
   const finish = useCallback(
     async (minutes: number, completed: boolean) => {
@@ -41,6 +43,8 @@ export default function TimerScreen() {
 
   const timer = useTimer(
     useCallback(() => {
+      // 音とバイブレーションで知らせる（仕様書 6 章、ADR-0013）
+      notifyComplete()
       void finish(SESSION_MINUTES, true)
     }, [finish]),
   )
@@ -85,7 +89,18 @@ export default function TimerScreen() {
         </Button>
       </div>
 
-      <p className="timer__sound">音の設定</p>
+      <button
+        type="button"
+        className="timer__sound"
+        aria-pressed={soundOn}
+        onClick={() => {
+          const next = !soundOn
+          setSoundEnabled(next)
+          setSoundOn(next)
+        }}
+      >
+        音 {soundOn ? 'オン' : 'オフ'}
+      </button>
     </main>
   )
 }

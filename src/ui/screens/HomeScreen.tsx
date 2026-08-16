@@ -17,6 +17,7 @@ import StatTile from '../components/StatTile'
 import StorageNotice from '../components/StorageNotice'
 import { categoryLabels, durationParts, formatDate, greeting, recordWhen } from '../format'
 import { paths } from '../paths'
+import { unlock } from '../sound'
 
 export default function HomeScreen() {
   const { stats, growth, sessions } = useAppState()
@@ -54,7 +55,15 @@ export default function HomeScreen() {
       </div>
 
       <div className="home__actions">
-        <Button variant="main" onClick={() => void navigate(paths.timer)}>
+        <Button
+          variant="main"
+          onClick={() => {
+            // ユーザー操作のうちに音声を使えるようにしておく。
+            // 25 分後にはこの機会がない（ADR-0013）
+            unlock()
+            void navigate(paths.timer)
+          }}
+        >
           25分、勉強を始める
         </Button>
         <Button variant="sub" disabled>

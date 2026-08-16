@@ -35,6 +35,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | SPA の直リンク | 404.html フォールバック（HashRouter を使わない） | [0010](docs/adr/0010-spa-routing-on-pages.md) |
 | テーマ | ライト固定。ダークテーマを持たない | [0011](docs/adr/0011-light-theme-only.md) |
 | 一日の境界 | 午前 4 時。深夜の学習は前日ぶん | [0012](docs/adr/0012-day-boundary-at-4am.md) |
+| 終了音 | Web Audio で合成。音声ファイルを持たない | [0013](docs/adr/0013-completion-sound.md) |
 
 ### 対応環境と確認方針
 
