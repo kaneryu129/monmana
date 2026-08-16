@@ -63,6 +63,7 @@ describe('leafCount', () => {
   })
 
   it('Lv.3 ではじめての 1 枚', () => {
+    // 仕様書 10 章「Lv.3 小さな葉が開く」
     expect(leafCount(3)).toBe(1)
   })
 
@@ -70,13 +71,13 @@ describe('leafCount', () => {
     expect(leafCount(4)).toBe(2)
   })
 
-  it('Lv.10 で 8 枚', () => {
-    expect(leafCount(10)).toBe(8)
+  it('Lv.10 で 6 枚', () => {
+    expect(leafCount(10)).toBe(6)
   })
 
   it('Lv.11 以降もゆっくり増え続ける', () => {
-    expect(leafCount(12)).toBe(9)
-    expect(leafCount(20)).toBe(13)
+    expect(leafCount(11)).toBe(7)
+    expect(leafCount(20)).toBe(11)
   })
 
   it('レベルが上がって葉が減ることはない', () => {

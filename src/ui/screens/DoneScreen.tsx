@@ -50,14 +50,14 @@ export default function DoneScreen() {
           </p>
           <h1 className="done__title">Lv.{level} になりました！</h1>
           <p className="done__lead">{changeMessage}</p>
-          <Monstera level={level} size={196} className="done__figure--large" />
+          <Monstera level={level} size={196} motion="levelup" className="done__figure--large" />
           <p className="done__stage">{stageName(level)}</p>
         </>
       ) : (
         <>
           <h1 className="done__title">おつかれさま！</h1>
           <p className="done__lead">{completionMessage(session.minutes, session.drops)}</p>
-          <Monstera level={level} size={168} className="done__figure" />
+          <Monstera level={level} size={168} motion="react" className="done__figure" />
         </>
       )}
 
