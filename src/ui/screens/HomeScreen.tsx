@@ -1,27 +1,87 @@
 /**
  * ホーム画面。仕様書 5 章。
  *
- * 中身は #19（レイアウトと統計）と #20（直近の記録）で作り込む。
- * ここでは遷移が成立することだけを確かめる骨格。
+ * 目的は「アプリを開いてから迷わず勉強を始められること」。
+ * 主ボタンを 1 つに絞り、他の導線は控えめにする。
+ *
+ * モンステラの描画は #32 以降。ここでは置き場所だけ確保する。
  */
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toDateKey } from '../../domain/dateKey'
+import { levelFromDrops } from '../../domain/level'
+import { stageName } from '../../domain/stage'
+import { recentSessions } from '../../domain/stats'
 import { useAppState } from '../AppState'
+import Button from '../components/Button'
+import StatTile from '../components/StatTile'
 import StorageNotice from '../components/StorageNotice'
+import { categoryLabels, durationParts, formatDate, greeting, recordWhen } from '../format'
 import { paths } from '../paths'
 
 export default function HomeScreen() {
-  const { stats } = useAppState()
+  const { stats, growth, sessions } = useAppState()
+  const navigate = useNavigate()
+
+  const now = Date.now()
+  const today = toDateKey(now)
+  const level = levelFromDrops(stats.totalDrops)
+  const recent = recentSessions(sessions, 3)
+
+  const todayParts = durationParts(stats.todayMinutes)
+  const totalParts = durationParts(stats.totalMinutes)
+
   return (
-    <section className="screen">
-      <h1 className="screen__title">ホーム</h1>
-      <p className="screen__note">
-        今日 {stats.todayMinutes} 分 ／ 連続 {stats.streakDays} 日
-      </p>
-      <nav className="screen__nav">
-        <Link to={paths.timer}>25分、勉強を始める</Link>
-        <Link to={paths.plant}>モンステラを見る</Link>
-      </nav>
+    <main className="home">
+      <header className="home__head">
+        <p className="home__brand">モンまな</p>
+        <p className="home__date">{formatDate(now)}</p>
+      </header>
+
+      <p className="home__greeting">{greeting(growth.lastStudiedOn, today)}</p>
+
+      <Link to={paths.plant} className="plantcard">
+        <div className="plantcard__figure" aria-hidden="true" />
+        <span className="plantcard__level">
+          成長 Lv.{level} ／ {stageName(level)}
+        </span>
+        <span className="plantcard__go">モンステラを見る →</span>
+      </Link>
+
+      <div className="stats">
+        <StatTile label="今日" value={todayParts.value} unit={todayParts.unit} />
+        <StatTile label="連続" value={String(stats.streakDays)} unit="日" />
+        <StatTile label="累計" value={totalParts.value} unit={totalParts.unit} />
+      </div>
+
+      <div className="home__actions">
+        <Button variant="main" onClick={() => void navigate(paths.timer)}>
+          25分、勉強を始める
+        </Button>
+        <Button variant="sub" disabled>
+          時間だけ記録する
+        </Button>
+      </div>
+
+      {recent.length > 0 && (
+        <section className="recent">
+          <h2 className="recent__title">直近の記録</h2>
+          <ul className="recent__list">
+            {recent.map((s) => (
+              <li key={s.id} className="record">
+                <span className="record__minutes tabular">{s.minutes}分</span>
+                <span className="record__category">
+                  {s.category === undefined ? '' : categoryLabels[s.category]}
+                </span>
+                <span className="record__when">
+                  {recordWhen(s.startedAt, s.dateKey, today)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <StorageNotice />
-    </section>
+    </main>
   )
 }
