@@ -546,6 +546,12 @@ output,
 
 /* ── 手動記録シート（仕様書 9 章） ───────────*/
 
+/* dialog は open が無いとき display: none が既定。
+   .sheet で display を上書きすると閉じていても見えてしまう */
+.sheet:not([open]) {
+  display: none;
+}
+
 .sheet {
   border: 0;
   padding: var(--space-3) var(--space-6) var(--space-6);
@@ -753,4 +759,18 @@ output,
 .mark__date {
   flex: none;
   color: var(--c-ink-faint);
+}
+
+/* ── モンステラ（ADR-0008 手描き風） ─────────*/
+
+.monstera {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 輪郭をずらした層を重ね、刷りのにじみを作る */
+.monstera__ghost {
+  opacity: 0.38;
+  transform: translate(2px, 2.4px);
 }

@@ -16,6 +16,7 @@ import { stageName } from '../../domain/stage'
 import { useAppState } from '../AppState'
 import Button from '../components/Button'
 import { completionMessage } from '../format'
+import Monstera from '../plant/Monstera'
 import { paths } from '../paths'
 import { unlock } from '../sound'
 
@@ -49,14 +50,14 @@ export default function DoneScreen() {
           </p>
           <h1 className="done__title">Lv.{level} になりました！</h1>
           <p className="done__lead">{changeMessage}</p>
-          <div className="done__figure done__figure--large" aria-hidden="true" />
+          <Monstera level={level} size={196} className="done__figure--large" />
           <p className="done__stage">{stageName(level)}</p>
         </>
       ) : (
         <>
           <h1 className="done__title">おつかれさま！</h1>
           <p className="done__lead">{completionMessage(session.minutes, session.drops)}</p>
-          <div className="done__figure" aria-hidden="true" />
+          <Monstera level={level} size={168} className="done__figure" />
         </>
       )}
 

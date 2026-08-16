@@ -45,6 +45,22 @@
   --c-pot: #5c4534;
   --c-pot-dark: #463527;
 
+  /* モンステラの描画に渡す値（ADR-0008）。
+     <use> の影の DOM を越えるため、カスタムプロパティで渡す */
+  --plant-leaf-far: var(--c-leaf-far);
+  --plant-leaf-mid: var(--c-leaf);
+  --plant-leaf-near: var(--c-leaf-near);
+  --plant-line: var(--c-leaf-line);
+  --plant-line-w: 1.2;
+  --plant-midrib-w: 1.1;
+  --plant-stem: var(--c-leaf-far);
+  --plant-stem-w: 3.2;
+  --plant-varie: var(--c-variegation);
+  --plant-pot: var(--c-pot);
+  --plant-pot-rim: var(--c-pot-dark);
+  --plant-pot-line: var(--c-pot-dark);
+  --plant-soil: var(--c-soil);
+
   /* ── 文字組み ────────────────────────────
    * 明朝を見出しに使い、静けさを出す。
    * 日本語フォントは実体が大きく CDN も使えないため、システムフォントに頼る。 */
