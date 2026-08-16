@@ -47,14 +47,22 @@ export function hasVariegation(level: number): boolean {
 /**
  * 育てた葉の枚数。植物ビューに表示する（仕様書 8 章）。
  *
- * 仕様書 10 章の進化段階に合わせる。
- * Lv.1〜2 は芽のみで葉がなく、Lv.3 で最初の 1 枚が開く。
- * Lv.11 以降は 2 レベルごとに 1 枚増やし、増えすぎないようにする。
+ * **描画されている葉の数と一致させること。**
+ * ユーザーは画面上の葉を数えられるため、ずれれば必ず気づかれる。
+ * 実際の枚数は design/plant/src/stages.py が決めており、
+ * src/ui/plant/stages.test.ts で一致を検査している。
+ *
+ * 仕様書 10 章が枚数を指定しているのは Lv.3（はじめての葉）と
+ * Lv.4（葉が 2 枚になる）だけ。それ以外は見た目の都合で決めてよい。
  */
+const LEAF_COUNTS = [0, 0, 1, 2, 4, 4, 4, 5, 6, 6] as const
+
 export function leafCount(level: number): number {
-  if (!Number.isFinite(level) || level < 3) return 0
-  if (level <= 10) return level - 2 // Lv.3→1枚 ... Lv.10→8枚
-  return 8 + Math.floor((level - 10) / 2)
+  if (!Number.isFinite(level) || level < 1) return 0
+  const lv = Math.floor(level)
+  if (lv <= LEAF_COUNTS.length) return LEAF_COUNTS[lv - 1] ?? 0
+  // Lv.11 以降は 2 レベルごとに 1 枚。増えすぎないようにする
+  return 6 + Math.floor((lv - 9) / 2)
 }
 
 /**

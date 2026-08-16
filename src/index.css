@@ -676,6 +676,37 @@ output,
   margin: 0 auto;
 }
 
+/* 成長に応じて光が強くなる（仕様書 8 章）。
+   段階を 3 つに絞り、レベルアップの節目が分かるようにする */
+.plantview[data-growth='growing'] {
+  background: radial-gradient(
+    124% 64% at 50% 34%,
+    #fffefa 0%,
+    var(--c-paper) 54%,
+    var(--c-paper-sunk) 100%
+  );
+}
+
+.plantview[data-growth='mature'] {
+  background: radial-gradient(
+    130% 68% at 50% 33%,
+    #fffdf4 0%,
+    #fdfbf4 42%,
+    var(--c-paper) 70%,
+    var(--c-paper-sunk) 100%
+  );
+}
+
+.plantview__leafnote {
+  flex: none;
+  margin: 0;
+  min-height: 1.6em;
+  padding: 0 var(--space-6);
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--c-ink-soft);
+}
+
 .plantview__back {
   flex: none;
   padding: var(--space-5) var(--space-6) 0;
@@ -773,4 +804,96 @@ output,
 .monstera__ghost {
   opacity: 0.38;
   transform: translate(2px, 2.4px);
+}
+
+/* ── 成長の演出（仕様書 7 章） ───────────────
+   通常回は控えめに、レベルアップ時だけ明確に。
+   毎回派手に演出しない */
+
+.monstera__leaf {
+  transform-origin: 0 0;
+}
+
+/* 通常の完了。葉が少し揺れるだけ */
+.monstera--react .monstera__leaf {
+  animation: leaf-sway var(--duration-slow) var(--ease) 1;
+}
+
+@keyframes leaf-sway {
+  0% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(-2.2deg);
+  }
+  70% {
+    transform: rotate(1.4deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* 水滴が落ちる */
+.monstera__drop {
+  opacity: 0;
+  animation: drop-fall calc(var(--duration-slow) * 1.6) var(--ease) 1;
+}
+
+@keyframes drop-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(145px);
+  }
+}
+
+/* レベルアップ時。葉が開き、斑が現れる */
+.monstera--levelup .monstera__leaf {
+  animation: leaf-open var(--duration-levelup) var(--ease) 1 backwards;
+}
+
+@keyframes leaf-open {
+  0% {
+    transform: scale(0.72) rotate(-7deg);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* 葉を押せるとき。仕様書 8 章 */
+.monstera__leaf[role='button'] {
+  cursor: pointer;
+}
+
+.monstera__leaf[role='button']:focus-visible {
+  outline: 2px solid var(--c-green);
+  outline-offset: 2px;
+}
+
+/* 動きを減らす設定では演出しない。成長は形の変化で伝わる */
+@media (prefers-reduced-motion: reduce) {
+  .monstera__leaf,
+  .monstera__drop {
+    animation: none;
+  }
+
+  .monstera__drop {
+    opacity: 0;
+  }
 }

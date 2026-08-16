@@ -60,6 +60,7 @@
   --plant-pot-rim: var(--c-pot-dark);
   --plant-pot-line: var(--c-pot-dark);
   --plant-soil: var(--c-soil);
+  --plant-drop: #a8c8d8;
 
   /* ── 文字組み ────────────────────────────
    * 明朝を見出しに使い、静けさを出す。

@@ -11,47 +11,98 @@
 import { useId } from 'react'
 import { LEAF_PATHS, NEEDS_EVENODD, stageFor, type LeafSpec } from './stages'
 
+/**
+ * 演出の強さ。仕様書 7 章。
+ *
+ * - none    : 何もしない
+ * - react   : 小さな反応。葉が少し揺れ、水滴が落ちる（通常の完了時）
+ * - levelup : 葉が開き、斑が現れる（レベルアップ時のみ）
+ *
+ * **通常回とレベルアップ時で明確に差をつける。毎回派手に演出しない。**
+ */
+export type PlantMotion = 'none' | 'react' | 'levelup'
+
 interface Props {
   level: number
   /** 表示サイズ。小さいときはにじみの層を省く */
   size?: number
+  motion?: PlantMotion
+  /** 葉を押すと、その葉が育った時期を知らせる（仕様書 8 章。任意） */
+  onLeafSelect?: (index: number) => void
   className?: string
 }
 
 /** これより小さいと、にじみが濁って見えるため層を省く（ADR-0008 のトレードオフ） */
 const BLUR_THRESHOLD = 120
 
-function Leaf({ leaf, clipId }: { leaf: LeafSpec; clipId: string }) {
+function Leaf({
+  leaf,
+  clipId,
+  index,
+  onSelect,
+}: {
+  leaf: LeafSpec
+  clipId: string
+  index: number
+  onSelect?: (index: number) => void
+}) {
   const d = LEAF_PATHS[leaf.shape]
   const evenodd = NEEDS_EVENODD.includes(leaf.shape)
+  // 芽はまだ葉ではない。押しても「この葉は…」とは言えないため対象外にする
+  const interactive = onSelect !== undefined && leaf.shape !== 'sprout'
   return (
     <g transform={`translate(${leaf.x},${leaf.y}) rotate(${leaf.rot}) scale(${leaf.scale})`}>
-      <path
-        d={d}
-        fill={`var(--plant-leaf-${leaf.depth})`}
-        stroke="var(--plant-line)"
-        strokeWidth="var(--plant-line-w)"
-        strokeLinejoin="round"
-        fillRule={evenodd ? 'evenodd' : 'nonzero'}
-      />
-      {leaf.varie !== undefined && (
-        <g clipPath={`url(#${clipId})`}>
-          <path d={leaf.varie} fill="var(--plant-varie)" />
-        </g>
-      )}
-      <path
-        d="M 0,-8 L 0,-96"
-        fill="none"
-        stroke="var(--plant-line)"
-        strokeWidth="var(--plant-midrib-w)"
-        strokeLinecap="round"
-        opacity="0.45"
-      />
+      <g
+        className="monstera__leaf"
+        style={{ animationDelay: `${index * 90}ms` }}
+        {...(interactive
+          ? {
+              role: 'button',
+              tabIndex: 0,
+              'aria-label': `${index + 1}枚目の葉`,
+              onClick: () => onSelect(index),
+              onKeyDown: (e: React.KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onSelect(index)
+                }
+              },
+            }
+          : {})}
+      >
+        <path
+          d={d}
+          fill={`var(--plant-leaf-${leaf.depth})`}
+          stroke="var(--plant-line)"
+          strokeWidth="var(--plant-line-w)"
+          strokeLinejoin="round"
+          fillRule={evenodd ? 'evenodd' : 'nonzero'}
+        />
+        {leaf.varie !== undefined && (
+          <g clipPath={`url(#${clipId})`}>
+            <path d={leaf.varie} fill="var(--plant-varie)" />
+          </g>
+        )}
+        <path
+          d="M 0,-8 L 0,-96"
+          fill="none"
+          stroke="var(--plant-line)"
+          strokeWidth="var(--plant-midrib-w)"
+          strokeLinecap="round"
+          opacity="0.45"
+        />
+      </g>
     </g>
   )
 }
 
-export default function Monstera({ level, size = 240, className }: Props) {
+export default function Monstera({
+  level,
+  size = 240,
+  motion = 'none',
+  onLeafSelect,
+  className,
+}: Props) {
   const id = useId()
   const clipId = `${id}-clip`
   const stage = stageFor(level)
@@ -92,14 +143,32 @@ export default function Monstera({ level, size = 240, className }: Props) {
       ))}
 
       {stage.leaves.map((leaf, i) => (
-        <Leaf key={i} leaf={leaf} clipId={clipId} />
+        <Leaf
+          key={i}
+          leaf={leaf}
+          clipId={clipId}
+          index={i}
+          {...(onLeafSelect ? { onSelect: onLeafSelect } : {})}
+        />
       ))}
+
+      {/* 水滴。通常の完了時だけ落ちる（仕様書 7 章） */}
+      {motion === 'react' && (
+        <ellipse
+          className="monstera__drop"
+          cx="0"
+          cy="-150"
+          rx="3.4"
+          ry="5"
+          fill="var(--plant-drop)"
+        />
+      )}
     </g>
   )
 
   return (
     <svg
-      className={`monstera${className === undefined ? '' : ` ${className}`}`}
+      className={`monstera monstera--${motion}${className === undefined ? '' : ` ${className}`}`}
       viewBox="0 0 240 268"
       width={size}
       height={size * (268 / 240)}
