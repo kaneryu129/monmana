@@ -16,6 +16,7 @@ import { formatDuration } from '../../domain/minutes'
 import { leafCount, stageName } from '../../domain/stage'
 import type { Milestone } from '../../domain/types'
 import { useAppState } from '../AppState'
+import BackupPanel from '../components/BackupPanel'
 import Monstera from '../plant/Monstera'
 import { paths } from '../paths'
 
@@ -94,6 +95,8 @@ export default function PlantViewScreen() {
             ))}
           </ul>
         )}
+
+        <BackupPanel />
       </div>
     </main>
   )

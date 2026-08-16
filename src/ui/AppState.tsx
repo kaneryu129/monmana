@@ -33,6 +33,8 @@ interface AppStateValue {
   lastResult: RecordResult | undefined
   /** 直前の記録にひとことメモを書き足す（仕様書 7 章） */
   saveMemo: (memo: string) => Promise<void>
+  /** 取り込んだデータで置き換える（ADR-0002 の緩和策。#42） */
+  replaceAll: (growth: GrowthState, sessions: StudySession[]) => Promise<void>
 }
 
 const AppStateContext = createContext<AppStateValue | undefined>(undefined)
@@ -108,12 +110,37 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     [lastResult, repo],
   )
 
+  const replaceAll = useCallback(
+    async (nextGrowth: GrowthState, nextSessions: StudySession[]) => {
+      if (repo) {
+        // 先に消してから入れる。混ざると同じ記録が二重になる
+        await repo.clear()
+        for (const s of nextSessions) await repo.addSession(s)
+        await repo.saveGrowthState(nextGrowth)
+      }
+      setGrowth(nextGrowth)
+      setSessions(nextSessions)
+      setLastResult(undefined)
+    },
+    [repo],
+  )
+
   // 日付をまたぐと「今日の学習時間」が変わるため、都度算出する
   const stats = useMemo(() => computeStats(sessions, Date.now()), [sessions])
 
   const value = useMemo(
-    () => ({ ready, persistent, growth, sessions, stats, record, lastResult, saveMemo }),
-    [ready, persistent, growth, sessions, stats, record, lastResult, saveMemo],
+    () => ({
+      ready,
+      persistent,
+      growth,
+      sessions,
+      stats,
+      record,
+      lastResult,
+      saveMemo,
+      replaceAll,
+    }),
+    [ready, persistent, growth, sessions, stats, record, lastResult, saveMemo, replaceAll],
   )
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>

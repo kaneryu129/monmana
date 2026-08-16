@@ -14,6 +14,7 @@ import { stageName } from '../../domain/stage'
 import { recentSessions } from '../../domain/stats'
 import { useAppState } from '../AppState'
 import Button from '../components/Button'
+import InstallNotice from '../components/InstallNotice'
 import ManualRecordSheet from '../components/ManualRecordSheet'
 import StatTile from '../components/StatTile'
 import StorageNotice from '../components/StorageNotice'
@@ -95,6 +96,7 @@ export default function HomeScreen() {
       )}
 
       <StorageNotice />
+      <InstallNotice />
 
       <ManualRecordSheet open={manualOpen} onClose={() => setManualOpen(false)} />
     </main>
