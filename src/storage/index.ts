@@ -16,15 +16,38 @@ export interface RepositoryHandle {
   persistent: boolean
 }
 
+/**
+ * IndexedDB を開くのを諦めるまでの時間（ミリ秒）。
+ *
+ * `indexedDB.open()` は、成功も失敗も返さないまま応答しないことがある。
+ * 別のタブが古いバージョンで開いている場合や、ブラウザの設定によって起こる。
+ * この状態を待ち続けると、アプリは真っ白な画面のまま固まる。
+ *
+ * 待ち時間は長めに取る。ここで諦めると「保存されない」と案内することになり、
+ * 実際には無事だったデータを不安にさせるため。
+ * 起動が遅い端末でも通る程度に余裕を持たせる。
+ */
+const OPEN_TIMEOUT_MS = 8000
+
+function timeout(ms: number): Promise<never> {
+  return new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('IndexedDB の応答がありません')), ms)
+  })
+}
+
 export async function createRepository(): Promise<RepositoryHandle> {
   if (typeof indexedDB === 'undefined') {
     return { repository: new InMemoryRepository(), persistent: false }
   }
   try {
-    return { repository: await IndexedDbRepository.open(), persistent: true }
-  } catch {
     // 開けない理由はいくつもある（容量、権限、別タブが古い版で開いている等）。
-    // どれであってもアプリは動かす。
+    // 応答が返らない場合も含め、どれであってもアプリは動かす。
+    const repository = await Promise.race([
+      IndexedDbRepository.open(),
+      timeout(OPEN_TIMEOUT_MS),
+    ])
+    return { repository, persistent: true }
+  } catch {
     return { repository: new InMemoryRepository(), persistent: false }
   }
 }
