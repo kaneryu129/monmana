@@ -17,6 +17,7 @@ import Button from '../components/Button'
 import ManualRecordSheet from '../components/ManualRecordSheet'
 import StatTile from '../components/StatTile'
 import StorageNotice from '../components/StorageNotice'
+import Monstera from '../plant/Monstera'
 import { categoryLabels, durationParts, formatDate, greeting, recordWhen } from '../format'
 import { paths } from '../paths'
 import { unlock } from '../sound'
@@ -44,7 +45,7 @@ export default function HomeScreen() {
       <p className="home__greeting">{greeting(growth.lastStudiedOn, today)}</p>
 
       <Link to={paths.plant} className="plantcard">
-        <div className="plantcard__figure" aria-hidden="true" />
+        <Monstera level={level} size={132} />
         <span className="plantcard__level">
           成長 Lv.{level} ／ {stageName(level)}
         </span>

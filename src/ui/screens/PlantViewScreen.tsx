@@ -14,6 +14,7 @@ import { formatDuration } from '../../domain/minutes'
 import { leafCount, stageName } from '../../domain/stage'
 import type { Milestone } from '../../domain/types'
 import { useAppState } from '../AppState'
+import Monstera from '../plant/Monstera'
 import { paths } from '../paths'
 
 /** 「2026.08.15」の形にする。節目の記録に添える */
@@ -40,7 +41,7 @@ export default function PlantViewScreen() {
 
       {/* 上半分はモンステラと光だけ。統計を置かない */}
       <div className="plantview__stage">
-        <div className="plantview__figure" aria-hidden="true" />
+        <Monstera level={level} size={300} className="plantview__figure" />
       </div>
 
       <div className="plantview__info">
