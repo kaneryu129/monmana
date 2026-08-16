@@ -57,7 +57,12 @@ export default function DoneScreen() {
         <>
           <h1 className="done__title">おつかれさま！</h1>
           <p className="done__lead">{completionMessage(session.minutes, session.drops)}</p>
-          <Monstera level={level} size={168} motion="react" className="done__figure" />
+          <Monstera
+            level={level}
+            size={168}
+            motion="react"
+            className={`done__figure${streakMilestone === 3 ? ' done__figure--sway' : ''}`}
+          />
         </>
       )}
 

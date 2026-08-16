@@ -1000,3 +1000,15 @@ output,
 .backup__message {
   color: var(--c-green);
 }
+
+/* ── 連続学習日数の節目（仕様書 11 章） ──────*/
+
+/* 3 日。葉が少し揺れる。通常の反応より長く、はっきりと */
+.done__figure--sway .monstera__leaf {
+  animation: leaf-sway calc(var(--duration-slow) * 2) var(--ease) 2;
+}
+
+/* 7 日。背景にやわらかい光が差す。続いている間はずっと */
+.home[data-streak='lit'] {
+  background: radial-gradient(108% 42% at 50% 16%, #fffdf4 0%, var(--c-paper) 62%);
+}
