@@ -28,6 +28,15 @@ export interface Repository {
   addSession(session: StudySession): Promise<void>
 
   /**
+   * 学習セッションを更新する。
+   *
+   * ひとことメモは完了画面で後から入力するため（仕様書 7 章）、
+   * 保存済みの記録に書き足す必要がある。
+   * それ以外の項目を後から変えることは想定していない。
+   */
+  updateSession(session: StudySession): Promise<void>
+
+  /**
    * 学習セッションを取得する。
    *
    * 条件を省略すると全件を返す。件数が増えたときのために

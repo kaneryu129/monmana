@@ -31,6 +31,8 @@ interface AppStateValue {
   record: (input: Omit<RecordInput, 'now'>) => Promise<RecordResult>
   /** 直前の記録。完了画面で使う */
   lastResult: RecordResult | undefined
+  /** 直前の記録にひとことメモを書き足す（仕様書 7 章） */
+  saveMemo: (memo: string) => Promise<void>
 }
 
 const AppStateContext = createContext<AppStateValue | undefined>(undefined)
@@ -90,12 +92,28 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     [growth, repo],
   )
 
+  const saveMemo = useCallback(
+    async (memo: string) => {
+      const target = lastResult?.session
+      if (target === undefined) return
+      const trimmed = memo.trim()
+      const updated: StudySession = { ...target }
+      if (trimmed === '') delete updated.memo
+      else updated.memo = trimmed
+
+      setSessions((prev) => prev.map((s) => (s.id === updated.id ? updated : s)))
+      setLastResult((prev) => (prev === undefined ? prev : { ...prev, session: updated }))
+      if (repo) await repo.updateSession(updated)
+    },
+    [lastResult, repo],
+  )
+
   // 日付をまたぐと「今日の学習時間」が変わるため、都度算出する
   const stats = useMemo(() => computeStats(sessions, Date.now()), [sessions])
 
   const value = useMemo(
-    () => ({ ready, persistent, growth, sessions, stats, record, lastResult }),
-    [ready, persistent, growth, sessions, stats, record, lastResult],
+    () => ({ ready, persistent, growth, sessions, stats, record, lastResult, saveMemo }),
+    [ready, persistent, growth, sessions, stats, record, lastResult, saveMemo],
   )
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>

@@ -78,6 +78,12 @@ export class IndexedDbRepository implements Repository {
     await done(tx)
   }
 
+  async updateSession(session: StudySession): Promise<void> {
+    const tx = this.db.transaction(STORE_SESSIONS, 'readwrite')
+    tx.objectStore(STORE_SESSIONS).put(session)
+    await done(tx)
+  }
+
   async getSessions(query: SessionQuery = {}): Promise<StudySession[]> {
     const tx = this.db.transaction(STORE_SESSIONS, 'readonly')
     const store = tx.objectStore(STORE_SESSIONS)
