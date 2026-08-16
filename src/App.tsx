@@ -1,90 +1,40 @@
-/*
- * 各画面は Issue #17（ルーティングと画面骨格）以降で実装する。
- * ここは土台が動いていることを確認するための暫定表示。
+/**
+ * 画面遷移。仕様書 4 章。
  *
- * IndexedDB に読み書きできているかを画面上に出す。
- * 仕様書 14 章の「次回開いたときにも保持されている」を実機で確かめるため。
+ * 未定義のパスはホームへ寄せる。ADR-0010 で 404.html を index.html と
+ * 同じ内容にしているため、存在しないパスでもこのアプリが起動する。
+ * その場合に「見つかりません」と突き放さず、静かにホームへ戻す。
  */
-import { useEffect, useState } from 'react'
-import { computeStats } from './domain/stats'
-import { recordSession } from './domain/recordSession'
-import { formatDuration } from './domain/minutes'
-import { levelFromDrops } from './domain/level'
-import { stageName } from './domain/stage'
-import { createRepository, type Repository } from './storage'
-import type { GrowthState, StudySession } from './domain/types'
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import { AppStateProvider, useAppState } from './ui/AppState'
+import { basename, paths } from './ui/paths'
+import DoneScreen from './ui/screens/DoneScreen'
+import HomeScreen from './ui/screens/HomeScreen'
+import PlantViewScreen from './ui/screens/PlantViewScreen'
+import TimerScreen from './ui/screens/TimerScreen'
 
-export default function App() {
-  const [repo, setRepo] = useState<Repository>()
-  const [persistent, setPersistent] = useState(true)
-  const [sessions, setSessions] = useState<StudySession[]>([])
-  const [growth, setGrowth] = useState<GrowthState>()
-
-  useEffect(() => {
-    let alive = true
-    void createRepository().then(async (handle) => {
-      if (!alive) return
-      setRepo(handle.repository)
-      setPersistent(handle.persistent)
-      setSessions(await handle.repository.getSessions())
-      setGrowth(await handle.repository.getGrowthState())
-    })
-    return () => {
-      alive = false
-    }
-  }, [])
-
-  async function addTestSession() {
-    if (!repo) return
-    const result = recordSession(growth, { minutes: 25, method: 'timer', now: Date.now() })
-    await repo.addSession(result.session)
-    await repo.saveGrowthState(result.growth)
-    setSessions(await repo.getSessions())
-    setGrowth(result.growth)
-  }
-
-  const stats = computeStats(sessions, Date.now())
-  const level = levelFromDrops(stats.totalDrops)
+function Shell() {
+  const { ready } = useAppState()
+  // 読み込み中は数値を出さない。0 が一瞬見えて「記録が消えた」と誤解させないため
+  if (!ready) return <div className="loading" aria-busy="true" />
 
   return (
-    <main className="boot">
-      <h1 className="boot__brand">モンまな</h1>
-      <p className="boot__tagline">勉強するたび、モンステラが育つ。</p>
+    <Routes>
+      <Route path={paths.home} element={<HomeScreen />} />
+      <Route path={paths.timer} element={<TimerScreen />} />
+      <Route path={paths.done} element={<DoneScreen />} />
+      <Route path={paths.plant} element={<PlantViewScreen />} />
+      <Route path="*" element={<Navigate to={paths.home} replace />} />
+    </Routes>
+  )
+}
 
-      <dl className="boot__stats">
-        <div>
-          <dt>成長</dt>
-          <dd>
-            Lv.{level} ／ {stageName(level)}
-          </dd>
-        </div>
-        <div>
-          <dt>今日</dt>
-          <dd>{formatDuration(stats.todayMinutes)}</dd>
-        </div>
-        <div>
-          <dt>連続</dt>
-          <dd>{stats.streakDays}日</dd>
-        </div>
-        <div>
-          <dt>累計</dt>
-          <dd>{formatDuration(stats.totalMinutes)}</dd>
-        </div>
-        <div>
-          <dt>しずく</dt>
-          <dd>{stats.totalDrops}</dd>
-        </div>
-      </dl>
-
-      <button className="boot__btn" onClick={() => void addTestSession()} disabled={!repo}>
-        25分ぶんを記録して確かめる
-      </button>
-
-      <p className="boot__note">
-        {persistent
-          ? '記録は端末内に保存されます。閉じて開き直しても残ります。'
-          : 'この環境では記録を保存できません。'}
-      </p>
-    </main>
+export default function App() {
+  return (
+    <Router basename={basename}>
+      <AppStateProvider>
+        <Shell />
+      </AppStateProvider>
+    </Router>
   )
 }
