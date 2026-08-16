@@ -23,6 +23,16 @@ import { categoryLabels, durationParts, formatDate, greeting, recordWhen } from 
 import { paths } from '../paths'
 import { unlock } from '../sound'
 
+/**
+ * 連続日数に応じた見え方。仕様書 11 章の節目の演出。
+ *
+ * 7 日つづくと背景にやわらかい光が差す。**続いている間はずっと差したまま**にする。
+ * その回だけの演出にすると、続けていることが画面に残らないため。
+ */
+function streakTone(days: number): 'plain' | 'lit' {
+  return days >= 7 ? 'lit' : 'plain'
+}
+
 export default function HomeScreen() {
   const { stats, growth, sessions } = useAppState()
   const navigate = useNavigate()
@@ -37,7 +47,7 @@ export default function HomeScreen() {
   const totalParts = durationParts(stats.totalMinutes)
 
   return (
-    <main className="home">
+    <main className="home" data-streak={streakTone(stats.streakDays)}>
       <header className="home__head">
         <p className="home__brand">モンまな</p>
         <p className="home__date">{formatDate(now)}</p>

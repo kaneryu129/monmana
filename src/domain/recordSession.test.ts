@@ -164,3 +164,43 @@ describe('recordSession / 元の状態を壊さない', () => {
     expect(JSON.stringify(before)).toBe(snapshot)
   })
 })
+
+describe('recordSession / 成長履歴（#43）', () => {
+  it('レベルアップは日付つきで履歴に残る', () => {
+    const r = recordSession(undefined, { minutes: 25, method: 'timer', now: NOW })
+    const m = r.growth.milestones.find((x) => x.kind === 'levelup')
+    expect(m).toBeDefined()
+    expect(m?.dateKey).toBe('2026-08-15')
+    expect(m?.value).toBe(2)
+    expect(m?.label).toContain('Lv.2')
+  })
+
+  it('履歴は積み上がる。過去の節目が消えない', () => {
+    let g = growth()
+    for (let i = 0; i < 6; i++) {
+      g = recordSession(g, { minutes: 25, method: 'timer', now: NOW }).growth
+    }
+    // 累計 6 しずくで Lv.4 まで上がる = レベルアップ 3 回
+    expect(g.milestones.filter((m) => m.kind === 'levelup')).toHaveLength(3)
+  })
+
+  it('3 日と 7 日は履歴に残さない。演出だけ（仕様書 11 章）', () => {
+    const before3 = growth({ streakDays: 2, lastStudiedOn: '2026-08-14' })
+    const r3 = recordSession(before3, { minutes: 25, method: 'timer', now: NOW })
+    expect(r3.streakMilestone).toBe(3)
+    expect(r3.growth.milestones.some((m) => m.kind === 'streak')).toBe(false)
+
+    const before7 = growth({ streakDays: 6, lastStudiedOn: '2026-08-14' })
+    const r7 = recordSession(before7, { minutes: 25, method: 'timer', now: NOW })
+    expect(r7.streakMilestone).toBe(7)
+    expect(r7.growth.milestones.some((m) => m.kind === 'streak')).toBe(false)
+  })
+
+  it('30 日だけ記念の記録を残す（仕様書 11 章）', () => {
+    const before = growth({ streakDays: 29, lastStudiedOn: '2026-08-14' })
+    const r = recordSession(before, { minutes: 25, method: 'timer', now: NOW })
+    const m = r.growth.milestones.find((x) => x.kind === 'streak')
+    expect(m?.value).toBe(30)
+    expect(m?.label).toContain('30日')
+  })
+})
