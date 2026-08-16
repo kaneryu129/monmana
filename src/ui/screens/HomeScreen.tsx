@@ -6,6 +6,7 @@
  */
 import { Link } from 'react-router-dom'
 import { useAppState } from '../AppState'
+import StorageNotice from '../components/StorageNotice'
 import { paths } from '../paths'
 
 export default function HomeScreen() {
@@ -20,6 +21,7 @@ export default function HomeScreen() {
         <Link to={paths.timer}>25分、勉強を始める</Link>
         <Link to={paths.plant}>モンステラを見る</Link>
       </nav>
+      <StorageNotice />
     </section>
   )
 }
