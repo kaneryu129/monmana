@@ -3,15 +3,15 @@
  *
  * 生の IndexedDB API は冗長なため、Promise で扱える薄いラッパをここに閉じ込める。
  * ドメインロジックからは Repository インターフェース越しにしか見えない。
+ *
+ * スキーマの移行方針は ADR-0015。**データ保持を最優先にし、消す操作を持たない。**
  */
 
 import type { GrowthState, StudySession } from '../domain/types'
+import { LATEST_VERSION, STORE_GROWTH, STORE_SESSIONS, migrationsAfter } from './migrations'
 import type { Repository, SessionQuery } from './types'
-import { SCHEMA_VERSION } from './types'
 
 const DB_NAME = 'monmana'
-const STORE_SESSIONS = 'sessions'
-const STORE_GROWTH = 'growth'
 /** 成長状態はひとつだけなので固定キーで保存する */
 const GROWTH_KEY = 'current'
 
@@ -30,26 +30,17 @@ function done(tx: IDBTransaction): Promise<void> {
   })
 }
 
-/**
- * データベースを開く。
- *
- * スキーマの作成は onupgradeneeded で行う。
- * 既存データを消す操作は書かない。ローカル保存のみで復旧手段が無いため（ADR-0002）。
- */
-export function openDatabase(name = DB_NAME, version = SCHEMA_VERSION): Promise<IDBDatabase> {
+function openAt(name: string, version: number | undefined): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(name, version)
+    const req = version === undefined ? indexedDB.open(name) : indexedDB.open(name, version)
 
-    req.onupgradeneeded = () => {
-      const db = req.result
-      if (!db.objectStoreNames.contains(STORE_SESSIONS)) {
-        const store = db.createObjectStore(STORE_SESSIONS, { keyPath: 'id' })
-        // 「今日の学習時間」「連続日数」の算出で日付による絞り込みが要る（ADR-0002）
-        store.createIndex('dateKey', 'dateKey', { unique: false })
-        store.createIndex('startedAt', 'startedAt', { unique: false })
-      }
-      if (!db.objectStoreNames.contains(STORE_GROWTH)) {
-        db.createObjectStore(STORE_GROWTH)
+    req.onupgradeneeded = (event) => {
+      // event.oldVersion は新規なら 0。そこから先の移行だけを適用する。
+      // 版を上げる方向にのみ動き、消す操作は書かない（ADR-0015）
+      const tx = req.transaction
+      if (tx === null) return
+      for (const m of migrationsAfter(event.oldVersion)) {
+        m.run(req.result, tx)
       }
     }
 
@@ -57,6 +48,25 @@ export function openDatabase(name = DB_NAME, version = SCHEMA_VERSION): Promise<
     req.onerror = () => reject(req.error ?? new Error('IndexedDB を開けませんでした'))
     req.onblocked = () => reject(new Error('別のタブが古いバージョンで開いています'))
   })
+}
+
+/**
+ * データベースを開く。
+ *
+ * **端末のデータがコードより新しい場合、版を下げようとしない。**
+ * 古い版のコードが残っている状態（ADR-0014 の自動更新の途中）で起こりうる。
+ * そのまま開いて、読めるものを読む。データを壊すより機能の欠落を選ぶ（ADR-0015）。
+ *
+ * 版を調べるために開いてしまうと、存在しないデータベースを空で作ってしまい
+ * 移行が走らなくなる。そのため先に最新版で開き、失敗したときだけ版を外す。
+ */
+export async function openDatabase(name = DB_NAME): Promise<IDBDatabase> {
+  try {
+    return await openAt(name, LATEST_VERSION)
+  } catch {
+    // 端末のデータのほうが新しいと VersionError になる。既存の版のまま開く
+    return openAt(name, undefined)
+  }
 }
 
 export class IndexedDbRepository implements Repository {
@@ -68,8 +78,13 @@ export class IndexedDbRepository implements Repository {
     this.db = db
   }
 
-  static async open(name?: string, version?: number): Promise<IndexedDbRepository> {
-    return new IndexedDbRepository(await openDatabase(name, version))
+  static async open(name?: string): Promise<IndexedDbRepository> {
+    return new IndexedDbRepository(await openDatabase(name))
+  }
+
+  /** 開いているデータの版。移行の検証に使う */
+  get version(): number {
+    return this.db.version
   }
 
   async addSession(session: StudySession): Promise<void> {

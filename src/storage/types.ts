@@ -11,8 +11,12 @@
 
 import type { GrowthState, StudySession } from '../domain/types'
 
-/** 保存形式のバージョン。スキーマを変えたら上げる（#16） */
-export const SCHEMA_VERSION = 1
+/**
+ * 保存形式のバージョン。
+ *
+ * 実体は migrations.ts が持つ。移行を足せば自動で上がる（ADR-0015）。
+ */
+export { LATEST_VERSION as SCHEMA_VERSION } from './migrations'
 
 export interface SessionQuery {
   /** この日以降（含む）。YYYY-MM-DD */

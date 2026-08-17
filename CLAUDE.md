@@ -37,6 +37,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 一日の境界 | 午前 4 時。深夜の学習は前日ぶん | [0012](docs/adr/0012-day-boundary-at-4am.md) |
 | 終了音 | Web Audio で合成。音声ファイルを持たない | [0013](docs/adr/0013-completion-sound.md) |
 | PWA | 全アセットを事前キャッシュ。更新は自動 | [0014](docs/adr/0014-pwa-offline-strategy.md) |
+| スキーマ移行 | 前進のみ。消す操作を持たない | [0015](docs/adr/0015-schema-migration.md) |
 
 ### 対応環境と確認方針
 
@@ -156,6 +157,9 @@ Issue 駆動で進める。詳細は ADR-0003。
 - また一緒に育てよう。
 
 ### 使ってはいけない文言
+
+**`src/ui/tone.test.ts` がソースを走査して検出する。** 追加した文言は自動で検査対象になる。
+`console.*` は開発者向けのため対象外。
 
 ユーザーを責める表現は禁止。以下は例であり、同種の表現すべてを避ける。
 
