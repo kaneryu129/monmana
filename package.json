@@ -13,7 +13,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "npm run typecheck && npm run lint && npm run format:check && npm test"
+    "verify": "tsc -b --force && npm run lint && npm run format:check && npm test"
   },
   "dependencies": {
     "react": "^19.2.8",

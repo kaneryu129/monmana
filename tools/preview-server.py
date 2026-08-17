@@ -24,9 +24,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         return os.path.join(ROOT, path.lstrip("/"))
 
     def send_error(self, code, message=None, explain=None):
-        # GitHub Pages にならい、見つからないパスは 404.html を返す
+        # GitHub Pages にならい、見つからないパスは 404.html を返す。
+        # vite build は dist を空にするため 404.html が無いことがある。
+        # デプロイ時はワークフローが作るので、ここでは index.html で代替する
         if code == 404:
             fallback = os.path.join(ROOT, "404.html")
+            if not os.path.exists(fallback):
+                fallback = os.path.join(ROOT, "index.html")
             if os.path.exists(fallback):
                 with open(fallback, "rb") as f:
                     body = f.read()
