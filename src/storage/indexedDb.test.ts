@@ -8,6 +8,7 @@ import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { INITIAL_GROWTH_STATE, type StudySession } from '../domain/types'
 import { IndexedDbRepository } from './indexedDb'
+import { SCHEMA_VERSION } from './types'
 
 let seq = 0
 function session(dateKey: string, minutes = 25, drops = 1): StudySession {
@@ -143,5 +144,44 @@ describe('IndexedDbRepository', () => {
     const s = session('2026-08-15')
     await repo.addSession(s)
     await expect(repo.addSession(s)).rejects.toThrow()
+  })
+
+  it('メモを後から書き足せる', async () => {
+    const s = session('2026-08-15')
+    await repo.addSession(s)
+    await repo.updateSession({ ...s, memo: '英単語を50個復習した' })
+    const got = await repo.getSessions()
+    expect(got).toHaveLength(1)
+    expect(got[0]?.memo).toBe('英単語を50個復習した')
+  })
+})
+
+describe('スキーマの移行（ADR-0015）', () => {
+  it('新規作成で最新の版になる', async () => {
+    const repo = await IndexedDbRepository.open(`monmana-mig-${Date.now()}`)
+    expect(repo.version).toBe(SCHEMA_VERSION)
+    repo.close()
+  })
+
+  it('開き直しても版が上がらない。無用な移行を走らせない', async () => {
+    const name = `monmana-mig2-${Date.now()}`
+    const first = await IndexedDbRepository.open(name)
+    const v = first.version
+    first.close()
+
+    const second = await IndexedDbRepository.open(name)
+    expect(second.version).toBe(v)
+    second.close()
+  })
+
+  it('移行をまたいでも記録が残る', async () => {
+    const name = `monmana-mig3-${Date.now()}`
+    const first = await IndexedDbRepository.open(name)
+    await first.addSession(session('2026-08-15'))
+    first.close()
+
+    const second = await IndexedDbRepository.open(name)
+    expect(await second.getSessions()).toHaveLength(1)
+    second.close()
   })
 })
