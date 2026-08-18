@@ -38,6 +38,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 終了音 | Web Audio で合成。音声ファイルを持たない | [0013](docs/adr/0013-completion-sound.md) |
 | PWA | 全アセットを事前キャッシュ。更新は自動 | [0014](docs/adr/0014-pwa-offline-strategy.md) |
 | スキーマ移行 | 前進のみ。消す操作を持たない | [0015](docs/adr/0015-schema-migration.md) |
+| 音の出口 | 合成結果を WAV にして `<audio>` で鳴らす | [0016](docs/adr/0016-sound-playback-path.md) |
 
 ### 対応環境と確認方針
 
@@ -58,6 +59,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 7 日間の無操作でストレージ削除 | 起きない | 起きる（ホーム画面追加で回避） |
 | `navigator.vibrate()` | 動作する | 非対応 |
 | 音声の自動再生制限 | 緩い | 厳しい（要 unlock） |
+| 消音スイッチで Web Audio が消える | 起きない | 起きる（`<audio>` で回避） |
 
 **iPhone 上のブラウザは、何を使っても Safari (WebKit) である。**
 macOS の Safari を確認対象から外したのは手順の簡略化であり、
@@ -77,8 +79,11 @@ Safari は「確認環境」としては使わないが、「デバッグ道具�
 
 - **タイマーの計時は `Date.now()` の差分で行う。** `setInterval` のティックを数えてはいけない。
   バックグラウンドでスロットリングされ、25 分が正確に測れなくなる
-- **AudioContext は「勉強を始める」のタップ時に unlock する。** iOS の自動再生制限のため、
+- **音は「勉強を始める」のタップ時に unlock する。** iOS の自動再生制限のため、
   ユーザージェスチャなしに 25 分後の音は鳴らせない
+- **音は `<audio>` から鳴らす。Web Audio の `destination` に直結しない。**
+  iOS の消音スイッチは Web Audio の出力だけを消す。合成は `src/ui/chime.ts`、
+  鳴らし方は `src/ui/sound.ts`（ADR-0016）。**これで実際に鳴らなかった**（#85）
 - **バイブレーションは任意機能。** iOS Safari は `navigator.vibrate()` 非対応。
   対応環境でのみ振動させ、非対応環境は音のみで完了を知らせる
 - **ドメインロジックは UI から独立させる。** 純粋な TypeScript として書き、React に依存させない

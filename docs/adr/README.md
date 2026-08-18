@@ -74,3 +74,4 @@ docs/adr/NNNN-kebab-case-title.md
 | [0013](0013-completion-sound.md) | 終了音は Web Audio API で合成する | Accepted |
 | [0014](0014-pwa-offline-strategy.md) | PWA は全アセットを事前キャッシュし、自動更新する | Accepted |
 | [0015](0015-schema-migration.md) | スキーマ移行はデータ保持を最優先にし、消す操作を持たない | Accepted |
+| [0016](0016-sound-playback-path.md) | 合成した終了音は `<audio>` 要素で鳴らす | Accepted |

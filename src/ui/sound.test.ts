@@ -27,6 +27,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 describe('音の設定', () => {
@@ -56,6 +57,67 @@ describe('音の設定', () => {
     })
     expect(isSoundEnabled()).toBe(true)
     expect(() => setSoundEnabled(false)).not.toThrow()
+  })
+})
+
+/**
+ * `<audio>` の代役。ADR-0016 で音の出口をここに移したため、
+ * **どちらの経路を使ったか**を検査できるようにする。
+ */
+async function stubAudio() {
+  const played: string[] = []
+  const paused: string[] = []
+  class FakeAudio {
+    src = ''
+    preload = ''
+    currentTime = 0
+    play() {
+      played.push('play')
+      return Promise.resolve()
+    }
+    pause() {
+      paused.push('pause')
+    }
+  }
+  vi.stubGlobal('Audio', FakeAudio)
+  // Blob は Node にもあるのでそのまま使う。URL は差し替えると
+  // Vite のモジュール読み込みが壊れるため、この関数だけ入れ替える
+  vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:chime')
+  // 用意した <audio> はモジュールに held されるため、毎回読み直す
+  vi.resetModules()
+  const sound = await import('./sound')
+  return { played, paused, sound }
+}
+
+describe('鳴らす経路（ADR-0016）', () => {
+  it('<audio> で鳴らす。iOS の消音スイッチは Web Audio だけを消すため', async () => {
+    const { played, sound } = await stubAudio()
+    sound.playChime()
+    expect(played.length).toBeGreaterThan(0)
+  })
+
+  it('音をオフにしていれば鳴らさない', async () => {
+    const { played, sound } = await stubAudio()
+    sound.setSoundEnabled(false)
+    sound.playChime()
+    expect(played).toEqual([])
+  })
+
+  it('unlock は一度鳴らして止める。頭出しまで戻す', async () => {
+    const { played, paused, sound } = await stubAudio()
+    sound.unlock()
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(played).toHaveLength(1)
+    expect(paused).toHaveLength(1)
+  })
+
+  it('<audio> を用意できない環境でも例外にしない', async () => {
+    vi.stubGlobal('Audio', undefined)
+    vi.resetModules()
+    const sound = await import('./sound')
+    expect(() => sound.playChime()).not.toThrow()
+    expect(() => sound.unlock()).not.toThrow()
   })
 })
 
