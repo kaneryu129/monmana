@@ -15,7 +15,7 @@ import { useAppState } from '../AppState'
 import Button from '../components/Button'
 import { categoryLabels } from '../format'
 import { paths } from '../paths'
-import { isSoundEnabled, notifyComplete, setSoundEnabled } from '../sound'
+import { isSoundEnabled, notifyComplete, playChime, setSoundEnabled, unlock } from '../sound'
 import { useTimer } from '../useTimer'
 
 const categories: Category[] = ['english', 'certification', 'other']
@@ -26,6 +26,9 @@ export default function TimerScreen() {
   const [category, setCategory] = useState<Category>()
   const [saving, setSaving] = useState(false)
   const [soundOn, setSoundOn] = useState(() => isSoundEnabled())
+  // 試聴したあとだけ、消音スイッチのことを添える（ADR-0016）。
+  // 常に出しておくと、勉強中の画面に用のない説明が居座る
+  const [tried, setTried] = useState(false)
 
   const finish = useCallback(
     async (minutes: number, completed: boolean) => {
@@ -89,18 +92,40 @@ export default function TimerScreen() {
         </Button>
       </div>
 
-      <button
-        type="button"
-        className="timer__sound"
-        aria-pressed={soundOn}
-        onClick={() => {
-          const next = !soundOn
-          setSoundEnabled(next)
-          setSoundOn(next)
-        }}
-      >
-        音 {soundOn ? 'オン' : 'オフ'}
-      </button>
+      <div className="timer__soundrow">
+        <button
+          type="button"
+          className="timer__sound"
+          aria-pressed={soundOn}
+          onClick={() => {
+            const next = !soundOn
+            setSoundEnabled(next)
+            setSoundOn(next)
+          }}
+        >
+          音 {soundOn ? 'オン' : 'オフ'}
+        </button>
+        {soundOn && (
+          <button
+            type="button"
+            className="timer__sound"
+            onClick={() => {
+              // 25 分待たずに終わりの音を確かめられるようにする（ADR-0016）
+              unlock()
+              playChime()
+              setTried(true)
+            }}
+          >
+            音を試す
+          </button>
+        )}
+      </div>
+
+      {tried && (
+        <p className="timer__soundnote">
+          聞こえないときは、本体の消音スイッチを確かめてみてください。
+        </p>
+      )}
     </main>
   )
 }
