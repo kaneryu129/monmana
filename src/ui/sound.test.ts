@@ -112,6 +112,28 @@ describe('鳴らす経路（ADR-0016）', () => {
     expect(paused).toHaveLength(1)
   })
 
+  it('unlock の直後に鳴らしても、後始末に止められない（#87）', async () => {
+    const { played, paused, sound } = await stubAudio()
+    // タイマー画面の「音を試す」と同じ順序。unlock の pause が本命を止めていた
+    sound.unlock()
+    sound.playChime()
+    await Promise.resolve()
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(played).toHaveLength(2)
+    expect(paused).toEqual([])
+  })
+
+  it('一度許可されたら、次の unlock では鳴らし直さない', async () => {
+    const { played, sound } = await stubAudio()
+    sound.unlock()
+    await Promise.resolve()
+    await Promise.resolve()
+    sound.unlock()
+    await Promise.resolve()
+    expect(played).toHaveLength(1)
+  })
+
   it('<audio> を用意できない環境でも例外にしない', async () => {
     vi.stubGlobal('Audio', undefined)
     vi.resetModules()
