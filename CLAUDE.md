@@ -39,6 +39,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | PWA | 全アセットを事前キャッシュ。更新は自動 | [0014](docs/adr/0014-pwa-offline-strategy.md) |
 | スキーマ移行 | 前進のみ。消す操作を持たない | [0015](docs/adr/0015-schema-migration.md) |
 | 音の出口 | 合成結果を WAV にして `<audio>` で鳴らす | [0016](docs/adr/0016-sound-playback-path.md) |
+| 通し確認 | デスクトップ Chrome は自動、iPhone は手動 | [0017](docs/adr/0017-automated-chrome-walkthrough.md) |
 
 ### 対応環境と確認方針
 
@@ -70,6 +71,11 @@ iOS の制約が消えたわけではない。この区別を取り違えない�
 
 なお、バックグラウンドでのタイマー精度は Chrome でもスロットリングが再現するため、
 デスクトップで検証してよい。
+
+デスクトップ Chrome の確認は自動化してある（ADR-0017）。
+`npm run walkthrough` で仕様書 14 章の完成条件を通せる。
+**ヘッドレスでも IndexedDB・Service Worker・`<audio>` はいずれも動く。**
+以前「動かない」と書かれていたが誤りだった。実機に持ち込む前にここで潰すこと。
 
 iPhone 上の問題の調査には Mac の Safari Web Inspector を使う
 （iPhone 側で 設定 > Safari > 詳細 > Web インスペクタ をオンにし、USB 接続）。
@@ -186,6 +192,7 @@ npm run lint       # oxlint
 npm run typecheck  # tsc -b
 npm run format     # Prettier で整形
 npm run verify     # 型検査 + Lint + 整形確認 + テスト をまとめて実行
+npm run walkthrough # デスクトップ Chrome で仕様書 14 章の完成条件を通す（要 preview）
 ```
 
 **コミット前は `npm run verify` を使う。**
@@ -225,6 +232,8 @@ src/
 design/
   plant/      モンステラの図形と生成スクリプト
   screens/    画面モックアップと生成スクリプト
+tools/
+  walkthrough/ 通し確認の自動実行（ADR-0017）。アプリのコードには依存しない
 ```
 
 **依存の向き**: `ui` → `domain` / `storage`。逆向きの import をしないこと。
