@@ -8,3 +8,6 @@ dist-ssr
 *.log
 .DS_Store
 coverage
+
+# 通し確認の出力（ADR-0017）
+tools/walkthrough/out
