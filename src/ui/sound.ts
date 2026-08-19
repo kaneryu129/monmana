@@ -30,6 +30,17 @@ const STORAGE_KEY = 'monmana.sound'
 let element: HTMLAudioElement | undefined
 let context: AudioContext | undefined
 
+/**
+ * 再生の世代。
+ *
+ * `unlock()` は一度鳴らしてすぐ止めるが、その後始末は Promise の成立を待つため
+ * **あとから始めた再生に追いつく**（#87）。世代が変わっていたら止めない。
+ */
+let generation = 0
+
+/** 一度 `<audio>` の再生を許可されたか。許可後に unlock を繰り返す必要はない */
+let unlocked = false
+
 type AudioContextCtor = typeof AudioContext
 function getAudioContextCtor(): AudioContextCtor | undefined {
   if (typeof window === 'undefined') return undefined
@@ -101,10 +112,15 @@ export function unlock(): void {
  * 波形の先頭は無音にしてある（`chime.ts` の `LEAD_IN_SECONDS`）。
  */
 function unlockElement(): void {
+  // すでに許可されている。ここで鳴らし直すと、あとの再生を止める危険だけが残る
+  if (unlocked) return
   const el = ensureElement()
   if (el === undefined) return
+  const mine = ++generation
   try {
     const stop = () => {
+      // 自分より後に始まった再生がある。それを止めてはいけない（#87）
+      if (mine !== generation) return
       try {
         el.pause()
         el.currentTime = 0
@@ -113,8 +129,20 @@ function unlockElement(): void {
       }
     }
     const playing = el.play() as Promise<void> | undefined
-    if (playing === undefined) stop()
-    else void playing.then(stop, stop)
+    if (playing === undefined) {
+      unlocked = true
+      stop()
+      return
+    }
+    void playing.then(
+      () => {
+        unlocked = true
+        stop()
+      },
+      () => {
+        // 許可を得られなかった。次の操作でもう一度試す
+      },
+    )
   } catch {
     // 許可を得られなくてもタイマーは動く。ここで失敗しても体験を止めない
   }
@@ -153,6 +181,8 @@ function playViaElement(): boolean {
   const el = ensureElement()
   if (el === undefined) return false
   try {
+    // 進行中の unlock の後始末より新しい再生にする（#87）
+    generation += 1
     el.currentTime = 0
     const playing = el.play() as Promise<void> | undefined
     // 許可されていなければ拒否される。そのときは Web Audio に落とす
