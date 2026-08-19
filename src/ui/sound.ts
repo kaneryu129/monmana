@@ -176,21 +176,75 @@ export function playChime(): void {
   playViaWebAudio()
 }
 
+/**
+ * 再生が始まったかを見に行くまでの時間（ミリ秒）。
+ *
+ * 手元の 2 秒の WAV は、鳴り始めるまでに待たされる理由がない。
+ * ここを過ぎても `currentTime` が 0 なら、鳴っていないと判断してよい。
+ */
+const STALL_CHECK_MS = 500
+
 /** `<audio>` で鳴らす。呼び出せたかどうかを返す */
 function playViaElement(): boolean {
   const el = ensureElement()
   if (el === undefined) return false
   try {
     // 進行中の unlock の後始末より新しい再生にする（#87）
-    generation += 1
-    el.currentTime = 0
-    const playing = el.play() as Promise<void> | undefined
-    // 許可されていなければ拒否される。そのときは Web Audio に落とす
-    if (playing !== undefined) void playing.catch(() => playViaWebAudio())
+    const attempt: Attempt = { id: ++generation, abandoned: false }
+    startElement(el, attempt)
+    watchProgress(el, attempt)
     return true
   } catch {
     return false
   }
+}
+
+/** 1 回ぶんの再生。捨てた試行の拒否で、あとの再生を消さないために持つ */
+interface Attempt {
+  id: number
+  abandoned: boolean
+}
+
+function startElement(el: HTMLAudioElement, attempt: Attempt): void {
+  el.currentTime = 0
+  const playing = el.play() as Promise<void> | undefined
+  // 許可されていなければ拒否される。そのときは Web Audio に落とす
+  if (playing === undefined) return
+  void playing.catch(() => {
+    // 自分で捨てた試行、または新しい再生に置き換わったあと。ここで鳴らさない
+    if (attempt.abandoned || attempt.id !== generation) return
+    playViaWebAudio()
+  })
+}
+
+/**
+ * 鳴り始めたかを見張る。
+ *
+ * **背面から戻った直後は、`play()` が拒否も成功もしないまま止まることがある**（#89）。
+ * 凍結中に資源が捨てられており、`readyState` が 4 のままでも実体がない。
+ * この状態は例外にならないため、拒否を待つだけでは気づけない。
+ *
+ * 進んでいなければ `load()` で読み直し、それでも駄目なら Web Audio に落とす。
+ */
+function watchProgress(el: HTMLAudioElement, attempt: Attempt): void {
+  if (typeof setTimeout !== 'function') return
+  setTimeout(() => {
+    if (attempt.id !== generation || el.currentTime > 0) return
+    // これから捨てる試行。読み直しで拒否されても Web Audio に落とさない
+    attempt.abandoned = true
+    const retry: Attempt = { id: attempt.id, abandoned: false }
+    try {
+      el.load()
+      startElement(el, retry)
+    } catch {
+      playViaWebAudio()
+      return
+    }
+    setTimeout(() => {
+      if (retry.id !== generation || el.currentTime > 0) return
+      playViaWebAudio()
+    }, STALL_CHECK_MS)
+  }, STALL_CHECK_MS)
 }
 
 /**

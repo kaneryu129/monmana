@@ -64,16 +64,23 @@ describe('音の設定', () => {
  * `<audio>` の代役。ADR-0016 で音の出口をここに移したため、
  * **どちらの経路を使ったか**を検査できるようにする。
  */
-async function stubAudio() {
+async function stubAudio({ progresses = false } = {}) {
   const played: string[] = []
   const paused: string[] = []
+  const loaded: string[] = []
   class FakeAudio {
     src = ''
     preload = ''
     currentTime = 0
     play() {
       played.push('play')
+      // 背面から戻った直後は、再生を始めたつもりでも進まないことがある（#89）。
+      // 既定はその状態にしておき、鳴り始める場合だけ currentTime を進める
+      if (progresses) this.currentTime = 0.1
       return Promise.resolve()
+    }
+    load() {
+      loaded.push('load')
     }
     pause() {
       paused.push('pause')
@@ -86,7 +93,7 @@ async function stubAudio() {
   // 用意した <audio> はモジュールに held されるため、毎回読み直す
   vi.resetModules()
   const sound = await import('./sound')
-  return { played, paused, sound }
+  return { played, paused, loaded, sound }
 }
 
 describe('鳴らす経路（ADR-0016）', () => {
@@ -132,6 +139,74 @@ describe('鳴らす経路（ADR-0016）', () => {
     sound.unlock()
     await Promise.resolve()
     expect(played).toHaveLength(1)
+  })
+
+  it('鳴り始めなければ読み直して鳴らし直す（#89）', async () => {
+    vi.useFakeTimers()
+    try {
+      const { played, loaded, sound } = await stubAudio()
+      sound.playChime()
+      await vi.advanceTimersByTimeAsync(600)
+      // 凍結中に資源が捨てられている。読み直さないと永久に鳴らない
+      expect(loaded).toEqual(['load'])
+      expect(played).toHaveLength(2)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('鳴り始めていれば読み直さない', async () => {
+    vi.useFakeTimers()
+    try {
+      const { played, loaded, sound } = await stubAudio({ progresses: true })
+      sound.playChime()
+      await vi.advanceTimersByTimeAsync(600)
+      expect(loaded).toEqual([])
+      expect(played).toHaveLength(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('読み直しても鳴らなければ Web Audio に落ちる（#89）', async () => {
+    vi.useFakeTimers()
+    try {
+      const notes: number[] = []
+      class FakeContext {
+        state = 'running'
+        currentTime = 0
+        destination = {}
+        createOscillator() {
+          return {
+            type: '',
+            frequency: { value: 0 },
+            connect: () => {},
+            start: (at: number) => notes.push(at),
+            stop: () => {},
+          }
+        }
+        createGain() {
+          return {
+            gain: {
+              setValueAtTime: () => {},
+              linearRampToValueAtTime: () => {},
+              exponentialRampToValueAtTime: () => {},
+            },
+            connect: () => {},
+          }
+        }
+        resume() {
+          return Promise.resolve()
+        }
+      }
+      vi.stubGlobal('window', { AudioContext: FakeContext })
+      const { sound } = await stubAudio()
+      sound.playChime()
+      await vi.advanceTimersByTimeAsync(1200)
+      expect(notes.length).toBeGreaterThan(0)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('<audio> を用意できない環境でも例外にしない', async () => {
